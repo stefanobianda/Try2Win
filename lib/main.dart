@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:try2win/screens/home_page.dart';
-
-final themeData = ThemeData(
-  colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-  useMaterial3: true,
-);
-final themeDarkData = ThemeData.dark().copyWith();
+import 'package:try2win/screens/tabs.dart';
+import 'package:try2win/themes/theme.dart';
 
 void main() {
   runApp(const Try2WinApp());
@@ -21,7 +16,7 @@ class Try2WinApp extends StatelessWidget {
       title: 'Try 2 Win',
       theme: themeData,
       darkTheme: themeDarkData,
-      home: const HomePageScreen(),
+      home: const TabsScreen(),
     );
   }
 }
