@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:try2win/screens/coupons.dart';
 import 'package:try2win/screens/home.dart';
+import 'package:try2win/screens/campaigns.dart';
 
 class TabsScreen extends StatefulWidget {
   const TabsScreen({super.key});
@@ -26,6 +27,11 @@ class _TabsScreenState extends State<TabsScreen> {
     var activePageTitle = 'Home';
 
     if (selectedPageIndex == 1) {
+      activePage = const CampaignsScreen();
+      activePageTitle = 'Campaigns';
+    }
+
+    if (selectedPageIndex == 2) {
       activePage = const CouponsScreen();
       activePageTitle = 'Coupons';
     }
@@ -42,6 +48,10 @@ class _TabsScreenState extends State<TabsScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shop_two),
+            label: 'Campaigns',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.card_giftcard),
