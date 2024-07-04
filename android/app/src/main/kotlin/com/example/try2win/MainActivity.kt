@@ -1,4 +1,4 @@
-package com.example.try2win
+package ch.sbsoft.try2win
 
 import io.flutter.embedding.android.FlutterActivity
 

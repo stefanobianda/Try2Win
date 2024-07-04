@@ -16,9 +16,9 @@ class Try2WinApp extends StatelessWidget {
     var isLoggedIn = false;
 
     Widget current = const LoginScreen();
-    if (isLoggedIn) {
-      current = const TabsScreen();
-    }
+    // if (isLoggedIn) {
+    //   current = const TabsScreen();
+    // }
     return MaterialApp(
       title: 'Try 2 Win',
       theme: themeData,
