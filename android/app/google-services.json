@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "37871085786",
+    "project_id": "try2win-1a136",
+    "storage_bucket": "try2win-1a136.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:37871085786:android:cde615d8b8875f4cc81de3",
+        "android_client_info": {
+          "package_name": "ch.sbsoft.try2win"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC25d2LmZ3EeyXp1xuuSCe3Kkg8kgID9_U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

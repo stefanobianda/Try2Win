@@ -1,4 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+final _firebase = FirebaseAuth.instance;
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -14,12 +17,32 @@ class _LoginScreenState extends State<LoginScreen> {
   String _enteredEamil = '';
   String _enteredPassword = '';
 
-  void _submit() {
+  void _submit() async {
     final isValid = _form.currentState!.validate();
-    if (isValid) {
-      _form.currentState!.save();
-      print(_enteredEamil);
-      print(_enteredPassword);
+    if (!isValid) {
+      return;
+    }
+    _form.currentState!.save();
+    try {
+      if (_isLogin) {
+        final useerCredentials = await _firebase.signInWithEmailAndPassword(
+          email: _enteredEamil,
+          password: _enteredPassword,
+        );
+      } else {
+        final userCredentials = await _firebase.createUserWithEmailAndPassword(
+          email: _enteredEamil,
+          password: _enteredPassword,
+        );
+      }
+    } on FirebaseAuthException catch (error) {
+      if (error.code == 'email-already-in-use') {}
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(error.message ?? 'Authentication failed.'),
+        ),
+      );
     }
   }
 
@@ -84,7 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             height: 12,
                           ),
                           ElevatedButton(
-                            onPressed: () {},
+                            onPressed: _submit,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Theme.of(context)
                                   .colorScheme
