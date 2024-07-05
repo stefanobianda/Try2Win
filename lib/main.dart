@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:try2win/firebase_options.dart';
 import 'package:try2win/screens/login.dart';
+import 'package:try2win/screens/splash.dart';
 import 'package:try2win/screens/tabs.dart';
 import 'package:try2win/themes/app_theme.dart';
 
@@ -29,14 +30,13 @@ class Try2WinApp extends StatelessWidget {
       home: StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (ctx, snapshot) {
-          try {
-            if (snapshot.hasData) {
-              return const TabsScreen();
-            }
-            return const LoginScreen();
-          } catch (e) {
-            return Text('Error: $e');
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const SplashScreen();
           }
+          if (snapshot.hasData) {
+            return const TabsScreen();
+          }
+          return const LoginScreen();
         },
       ),
     );
