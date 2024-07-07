@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Coupon {
-  const Coupon(this.couponId, this.userId, this.customerId, this.campaignId,
+  Coupon(this.couponId, this.userId, this.customerId, this.campaignId,
       this.value, this.issuedAt);
 
   final String couponId;
@@ -10,4 +10,6 @@ class Coupon {
   final String campaignId;
   final double value;
   final Timestamp issuedAt;
+  Timestamp? usedAt;
+  final bool used = false;
 }
