@@ -41,7 +41,7 @@ class CouponDetailScreen extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              Text('Issued at ${date}'),
+              Text('Issued at $date'),
               const SizedBox(
                 height: 30,
               ),
