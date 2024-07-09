@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:try2win/themes/app_theme.dart';
 import 'package:try2win/widgets/read_qrcode.dart';
+import 'package:try2win/widgets/show_qrcode.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -24,6 +25,10 @@ class HomeScreen extends StatelessWidget {
         child: const Column(
           children: [
             Text("Home Screen"),
+            SizedBox(
+              height: 20,
+            ),
+            ShowQRCode(),
             SizedBox(
               height: 20,
             ),

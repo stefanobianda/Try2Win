@@ -12,10 +12,12 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _form = GlobalKey<FormState>();
+  final TextEditingController _pass = TextEditingController();
 
   var _isLogin = true;
   String _enteredEamil = '';
   String _enteredPassword = '';
+  String _confirmPassword = '_';
 
   void _submit() async {
     final isValid = _form.currentState!.validate();
@@ -29,10 +31,15 @@ class _LoginScreenState extends State<LoginScreen> {
           email: _enteredEamil,
           password: _enteredPassword,
         );
-      } else {
+      } else if (_enteredPassword == _confirmPassword) {
         final userCredentials = await _firebase.createUserWithEmailAndPassword(
           email: _enteredEamil,
           password: _enteredPassword,
+        );
+      } else {
+        throw FirebaseAuthException(
+          code: 'confirm-password-different',
+          message: 'Confirm Password is nopt the same!',
         );
       }
     } on FirebaseAuthException catch (error) {
@@ -50,6 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    int imageNum = DateTime.now().second % 2;
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
@@ -59,7 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Container(
                 margin: const EdgeInsets.all(20),
                 width: 200,
-                child: Image.asset('assets/images/'),
+                child: Image.asset('assets/images/signin$imageNum.jpg'),
               ),
               Card(
                 margin: const EdgeInsets.all(20),
@@ -91,6 +99,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             },
                           ),
                           TextFormField(
+                            controller: _pass,
                             decoration: const InputDecoration(
                               labelText: 'Password',
                             ),
@@ -105,9 +114,26 @@ class _LoginScreenState extends State<LoginScreen> {
                               _enteredPassword = value!;
                             },
                           ),
-                          const SizedBox(
-                            height: 12,
-                          ),
+                          if (!_isLogin)
+                            TextFormField(
+                              decoration: const InputDecoration(
+                                labelText: 'Confirm Password',
+                              ),
+                              obscureText: true,
+                              validator: (value) {
+                                if (value == null || value != _pass.text) {
+                                  return 'Confirmed Password is not equal to Password';
+                                }
+                                return null;
+                              },
+                              onSaved: (value) {
+                                _confirmPassword = value!;
+                              },
+                            ),
+                          if (!_isLogin)
+                            const SizedBox(
+                              height: 12,
+                            ),
                           ElevatedButton(
                             onPressed: _submit,
                             style: ElevatedButton.styleFrom(
