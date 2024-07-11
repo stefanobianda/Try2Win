@@ -5,7 +5,7 @@ import 'package:try2win/models/campaign.dart';
 import 'package:try2win/models/campaign_bo.dart';
 import 'package:try2win/models/purchase.dart';
 import 'package:try2win/models/supplier.dart';
-import 'package:try2win/themes/app_theme.dart';
+import 'package:try2win/widgets/app_decoration.dart';
 import 'package:try2win/widgets/campaigns_list.dart';
 
 class CampaignsScreen extends StatefulWidget {
@@ -41,16 +41,7 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
     return Container(
       width: double.infinity,
       height: double.infinity,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            kTicinoRed,
-            kTicinoBlue,
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-      ),
+      decoration: AppDecoration.build(context),
       child: current,
     );
   }

@@ -5,7 +5,7 @@ import 'package:try2win/models/campaign.dart';
 import 'package:try2win/models/coupon.dart';
 import 'package:try2win/models/coupon_bo.dart';
 import 'package:try2win/models/supplier.dart';
-import 'package:try2win/themes/app_theme.dart';
+import 'package:try2win/widgets/app_decoration.dart';
 import 'package:try2win/widgets/coupons_list.dart';
 
 class CouponsScreen extends StatefulWidget {
@@ -41,16 +41,7 @@ class _CouponsScreenState extends State<CouponsScreen> {
     return Container(
       width: double.infinity,
       height: double.infinity,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            kTicinoRed,
-            kTicinoBlue,
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-      ),
+      decoration: AppDecoration.build(context),
       child: current,
     );
   }

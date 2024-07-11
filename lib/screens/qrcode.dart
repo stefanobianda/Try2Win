@@ -5,7 +5,7 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:try2win/models/configuration.dart';
 import 'package:try2win/qrcode/qrcode_scanner.dart';
-import 'package:try2win/themes/app_theme.dart';
+import 'package:try2win/widgets/app_decoration.dart';
 
 class QRCodeScreen extends StatefulWidget {
   const QRCodeScreen({super.key});
@@ -60,16 +60,7 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              kTicinoRed,
-              kTicinoBlue,
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
+        decoration: AppDecoration.build(context),
         child: Column(
           children: [
             const Text('QRCode'),
