@@ -7,14 +7,14 @@ import 'package:try2win/models/configuration.dart';
 import 'package:try2win/qrcode/qrcode_scanner.dart';
 import 'package:try2win/themes/app_theme.dart';
 
-class DisplayQRCode extends StatefulWidget {
-  const DisplayQRCode({super.key});
+class QRCodeScreen extends StatefulWidget {
+  const QRCodeScreen({super.key});
 
   @override
-  State<DisplayQRCode> createState() => _DisplayQRCodeState();
+  State<QRCodeScreen> createState() => _QRCodeScreenState();
 }
 
-class _DisplayQRCodeState extends State<DisplayQRCode> {
+class _QRCodeScreenState extends State<QRCodeScreen> {
   final db = FirebaseFirestore.instance;
 
   final MobileScannerController controller = MobileScannerController(
@@ -23,10 +23,8 @@ class _DisplayQRCodeState extends State<DisplayQRCode> {
 
   @override
   void dispose() {
-    print('before dispose, controller is $controller');
     controller.dispose();
     super.dispose();
-    print('after dispose, controller is $controller');
   }
 
   String _result = '';
