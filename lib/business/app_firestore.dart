@@ -1,7 +1,10 @@
 import 'dart:collection';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:try2win/business/coupon_bo.dart';
 import 'package:try2win/models/campaign.dart';
+import 'package:try2win/models/coupon.dart';
 import 'package:try2win/models/supplier.dart';
 
 class AppFirestore {
@@ -38,5 +41,36 @@ class AppFirestore {
     );
     supplierMap[supplierId] = supplier;
     return supplier;
+  }
+
+  Future<List<CouponBO>> getCoupons() async {
+    final authenticatedUser = FirebaseAuth.instance.currentUser!;
+    List<CouponBO> readCoupons = [];
+    final couponsRef = db
+        .collection('coupons')
+        .where('userId', isEqualTo: authenticatedUser.uid)
+        .where('used', isEqualTo: false)
+        .withConverter(
+          fromFirestore: Coupon.fromFirestore,
+          toFirestore: (Coupon coupon, _) => coupon.toFirestore(),
+        );
+    final docSnap = await couponsRef.get();
+    print('go here');
+    for (var item in docSnap.docs) {
+      print('go here too');
+      final coupon = item.data();
+      coupon.couponId = item.id;
+      print(coupon.couponId);
+      CouponBO couponBO = CouponBO(
+        coupon: coupon,
+        supplier: await getSupplier(coupon.customerId),
+        campaign: await getCampaign(
+          coupon.customerId,
+          coupon.campaignId,
+        ),
+      );
+      readCoupons.add(couponBO);
+    }
+    return readCoupons;
   }
 }
