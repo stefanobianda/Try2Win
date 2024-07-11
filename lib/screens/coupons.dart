@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:try2win/models/campaign.dart';
 import 'package:try2win/models/coupon.dart';
-import 'package:try2win/models/coupon_bo.dart';
+import 'package:try2win/business/coupon_bo.dart';
 import 'package:try2win/models/supplier.dart';
 import 'package:try2win/widgets/app_decoration.dart';
 import 'package:try2win/widgets/coupons_list.dart';
@@ -100,12 +100,14 @@ class _CouponsScreenState extends State<CouponsScreen> {
         .collection('suppliers')
         .doc(supplierId)
         .collection('campaigns')
-        .doc(campaignId);
-    return await campaignRef.get().then(
-      (doc) async {
-        final data = doc.data();
-        return Campaign(data?['name']);
-      },
-    );
+        .doc(campaignId)
+        .withConverter(
+          fromFirestore: Campaign.fromFirestore,
+          toFirestore: (Campaign campaign, _) => campaign.toFirestore(),
+        );
+    final docSnap = await campaignRef.get();
+    var campaign = docSnap.data();
+    campaign ??= Campaign(title: "NotFound");
+    return campaign;
   }
 }

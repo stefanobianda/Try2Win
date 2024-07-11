@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:try2win/models/coupon_bo.dart';
+import 'package:try2win/business/coupon_bo.dart';
 import 'package:try2win/screens/coupon_detail.dart';
 
 class CouponsList extends StatelessWidget {
@@ -23,7 +23,7 @@ class CouponsList extends StatelessWidget {
               child: Column(
                 children: [
                   Text(couponsList[index].supplier.title),
-                  Text(couponsList[index].campaign.title),
+                  Text(couponsList[index].campaign.title ?? 'Not Found'),
                 ],
               ),
             ),

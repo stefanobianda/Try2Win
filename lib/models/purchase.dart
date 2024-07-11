@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class Purchase {
   Purchase(this.purchaseId, this.userId, this.supplierId, this.campaignId,
       this.issuedAt);
@@ -8,5 +6,5 @@ class Purchase {
   final String userId;
   final String supplierId;
   final String campaignId;
-  final Timestamp issuedAt;
+  final DateTime issuedAt;
 }

@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:try2win/models/configuration.dart';
+import 'package:try2win/business/configuration.dart';
 import 'package:try2win/qrcode/qrcode_scanner.dart';
 import 'package:try2win/widgets/app_decoration.dart';
 

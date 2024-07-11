@@ -1,10 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:try2win/models/campaign.dart';
-import 'package:try2win/models/campaign_bo.dart';
+import 'package:try2win/business/app_firestore.dart';
+import 'package:try2win/business/campaign_bo.dart';
 import 'package:try2win/models/purchase.dart';
-import 'package:try2win/models/supplier.dart';
 import 'package:try2win/widgets/app_decoration.dart';
 import 'package:try2win/widgets/campaigns_list.dart';
 
@@ -65,11 +64,13 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
             data['userId'],
             item.data()['supplierId'],
             item.data()['campaignId'],
-            item.data()['createdAt']);
+            (item.data()['createdAt'] as Timestamp).toDate());
         CampaignBO campaignBO = CampaignBO(
           purchase: purchase,
-          supplier: await _getSupplier(purchase.supplierId),
-          campaign: await _getCampaign(
+          supplier: await AppFirestore().getSupplier(
+            purchase.supplierId,
+          ),
+          campaign: await AppFirestore().getCampaign(
             purchase.supplierId,
             purchase.campaignId,
           ),
@@ -81,29 +82,5 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
       userCampaigns = readCampaigns.toList();
       _isLoading = false;
     });
-  }
-
-  Future<Supplier> _getSupplier(String supplierId) async {
-    final supplierRef = db.collection('suppliers').doc(supplierId);
-    return await supplierRef.get().then(
-      (doc) async {
-        final data = doc.data();
-        return Supplier(data?['name']);
-      },
-    );
-  }
-
-  Future<Campaign> _getCampaign(String supplierId, String campaignId) async {
-    final campaignRef = db
-        .collection('suppliers')
-        .doc(supplierId)
-        .collection('campaigns')
-        .doc(campaignId);
-    return await campaignRef.get().then(
-      (doc) async {
-        final data = doc.data();
-        return Campaign(data?['name']);
-      },
-    );
   }
 }
