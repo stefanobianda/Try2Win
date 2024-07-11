@@ -47,9 +47,8 @@ class _CouponsScreenState extends State<CouponsScreen> {
     setState(() {
       _isLoading = true;
     });
-    print('start');
+
     List<CouponBO> readCoupons = await AppFirestore().getCoupons();
-    print('ends');
 
     setState(() {
       userCoupons = readCoupons.toList();

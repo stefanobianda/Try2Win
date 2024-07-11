@@ -29,16 +29,17 @@ class AppFirestore {
   }
 
   Future<Supplier> getSupplier(String supplierId) async {
-    final supplierRef = db.collection('suppliers').doc(supplierId);
+    final supplierRef =
+        db.collection('suppliers').doc(supplierId).withConverter(
+              fromFirestore: Supplier.fromFirestore,
+              toFirestore: (Supplier supplier, _) => supplier.toFirestore(),
+            );
     if (supplierMap.containsKey(supplierId)) {
       return supplierMap[supplierId]!;
     }
-    Supplier supplier = await supplierRef.get().then(
-      (doc) async {
-        final data = doc.data();
-        return Supplier(data?['name']);
-      },
-    );
+    final docSnap = await supplierRef.get();
+    var supplier = docSnap.data();
+    supplier ??= Supplier(title: 'Not Found');
     supplierMap[supplierId] = supplier;
     return supplier;
   }
@@ -55,12 +56,9 @@ class AppFirestore {
           toFirestore: (Coupon coupon, _) => coupon.toFirestore(),
         );
     final docSnap = await couponsRef.get();
-    print('go here');
     for (var item in docSnap.docs) {
-      print('go here too');
       final coupon = item.data();
       coupon.couponId = item.id;
-      print(coupon.couponId);
       CouponBO couponBO = CouponBO(
         coupon: coupon,
         supplier: await getSupplier(coupon.customerId),
