@@ -31,6 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
           email: _enteredEamil,
           password: _enteredPassword,
         );
+        print(useerCredentials);
       } else if (_enteredPassword == _confirmPassword) {
         final userCredentials = await _firebase.createUserWithEmailAndPassword(
           email: _enteredEamil,

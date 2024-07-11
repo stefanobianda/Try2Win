@@ -4,15 +4,14 @@ import 'package:try2win/qrcode/scanned_barcode_label.dart';
 import 'package:try2win/qrcode/scanner_button_widgets.dart';
 
 class QrCodeScanner extends StatelessWidget {
-  QrCodeScanner({
+  const QrCodeScanner({
     required this.setResult,
+    required this.controller,
     super.key,
   });
 
   final Function setResult;
-  final MobileScannerController controller = MobileScannerController(
-    formats: const [BarcodeFormat.qrCode],
-  );
+  final MobileScannerController controller;
 
   @override
   Widget build(BuildContext context) {
