@@ -2,9 +2,11 @@ import 'dart:collection';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:try2win/business/campaign_bo.dart';
 import 'package:try2win/business/coupon_bo.dart';
 import 'package:try2win/models/campaign.dart';
 import 'package:try2win/models/coupon.dart';
+import 'package:try2win/models/purchase.dart';
 import 'package:try2win/models/supplier.dart';
 
 class AppFirestore {
@@ -70,5 +72,33 @@ class AppFirestore {
       readCoupons.add(couponBO);
     }
     return readCoupons;
+  }
+
+  Future<List<CampaignBO>> getUserCampaign() async {
+    final authenticatedUser = FirebaseAuth.instance.currentUser!;
+    final purchasesRef = db
+        .collection('purchases')
+        .where('userId', isEqualTo: authenticatedUser.uid)
+        .withConverter(
+          fromFirestore: Purchase.fromFirestore,
+          toFirestore: (Purchase purchase, _) => purchase.toFirestore(),
+        );
+    List<CampaignBO> readCampaigns = [];
+    final docSnap = await purchasesRef.get();
+    for (var item in docSnap.docs) {
+      final purchase = item.data();
+      CampaignBO campaignBO = CampaignBO(
+        purchase: purchase,
+        supplier: await AppFirestore().getSupplier(
+          purchase.supplierId,
+        ),
+        campaign: await AppFirestore().getCampaign(
+          purchase.supplierId,
+          purchase.campaignId,
+        ),
+      );
+      readCampaigns.add(campaignBO);
+    }
+    return readCampaigns;
   }
 }

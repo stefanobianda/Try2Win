@@ -1,9 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:try2win/business/app_firestore.dart';
 import 'package:try2win/business/campaign_bo.dart';
-import 'package:try2win/models/purchase.dart';
 import 'package:try2win/widgets/app_decoration.dart';
 import 'package:try2win/widgets/campaigns_list.dart';
 
@@ -49,35 +47,9 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
     setState(() {
       _isLoading = true;
     });
-    final authenticatedUser = FirebaseAuth.instance.currentUser!;
-    final purchasesRef = db.collection('purchases');
-    List<CampaignBO> readCampaigns = [];
 
-    await purchasesRef
-        .where('userId', isEqualTo: authenticatedUser.uid)
-        .get()
-        .then((snapshot) async {
-      for (var item in snapshot.docs) {
-        final data = item.data();
-        final purchase = Purchase(
-            item.id,
-            data['userId'],
-            item.data()['supplierId'],
-            item.data()['campaignId'],
-            (item.data()['createdAt'] as Timestamp).toDate());
-        CampaignBO campaignBO = CampaignBO(
-          purchase: purchase,
-          supplier: await AppFirestore().getSupplier(
-            purchase.supplierId,
-          ),
-          campaign: await AppFirestore().getCampaign(
-            purchase.supplierId,
-            purchase.campaignId,
-          ),
-        );
-        readCampaigns.add(campaignBO);
-      }
-    });
+    List<CampaignBO> readCampaigns = await AppFirestore().getUserCampaign();
+
     setState(() {
       userCampaigns = readCampaigns.toList();
       _isLoading = false;

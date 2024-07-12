@@ -25,7 +25,7 @@ class CampaignList extends StatelessWidget {
                   Text(
                       '${campaignList[index].supplier.title} - ${campaignList[index].campaign.title}'),
                   Text(DateFormat('dd/MM/yyyy, HH:mm')
-                      .format(campaignList[index].purchase.issuedAt))
+                      .format(campaignList[index].purchase.createdAt.toDate()))
                 ],
               ),
             ),
