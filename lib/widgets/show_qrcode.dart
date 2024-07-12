@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:try2win/screens/display_qrcode.dart';
+import 'package:try2win/screens/qrcode.dart';
 
 class ShowQRCode extends StatelessWidget {
   const ShowQRCode({super.key});
@@ -16,7 +16,7 @@ class ShowQRCode extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (ctx) => const DisplayQRCode(),
+                builder: (ctx) => const QRCodeScreen(),
               ),
             );
           },

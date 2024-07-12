@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:try2win/models/coupon_bo.dart';
-import 'package:try2win/themes/app_theme.dart';
+import 'package:try2win/business/coupon_bo.dart';
+import 'package:try2win/widgets/app_decoration.dart';
 
 class CouponDetailScreen extends StatelessWidget {
   const CouponDetailScreen({super.key, required this.couponBO});
@@ -21,16 +21,7 @@ class CouponDetailScreen extends StatelessWidget {
         child: Container(
           width: double.infinity,
           height: double.infinity,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                kTicinoRed,
-                kTicinoBlue,
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
+          decoration: AppDecoration.build(context),
           child: Column(
             children: [
               Text('Coupon from ${couponBO.supplier.title}'),
@@ -46,7 +37,7 @@ class CouponDetailScreen extends StatelessWidget {
                 height: 30,
               ),
               QrImageView(
-                data: couponBO.coupon.couponId,
+                data: couponBO.coupon.couponId!,
                 version: QrVersions.auto,
                 size: 300,
                 backgroundColor: Colors.white,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:try2win/models/campaign_bo.dart';
+import 'package:intl/intl.dart';
+import 'package:try2win/business/campaign_bo.dart';
 
 class CampaignList extends StatelessWidget {
   const CampaignList({super.key, required this.campaignList});
@@ -21,8 +22,10 @@ class CampaignList extends StatelessWidget {
               margin: const EdgeInsets.all(5),
               child: Column(
                 children: [
-                  Text(campaignList[index].supplier.title),
-                  Text(campaignList[index].campaign.title),
+                  Text(
+                      '${campaignList[index].supplier.title} - ${campaignList[index].campaign.title}'),
+                  Text(DateFormat('dd/MM/yyyy, HH:mm')
+                      .format(campaignList[index].purchase.createdAt.toDate()))
                 ],
               ),
             ),

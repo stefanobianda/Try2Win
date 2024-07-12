@@ -1,11 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:try2win/models/campaign.dart';
-import 'package:try2win/models/coupon.dart';
-import 'package:try2win/models/coupon_bo.dart';
-import 'package:try2win/models/supplier.dart';
-import 'package:try2win/themes/app_theme.dart';
+import 'package:try2win/business/app_firestore.dart';
+import 'package:try2win/business/coupon_bo.dart';
+import 'package:try2win/widgets/app_decoration.dart';
 import 'package:try2win/widgets/coupons_list.dart';
 
 class CouponsScreen extends StatefulWidget {
@@ -41,16 +38,7 @@ class _CouponsScreenState extends State<CouponsScreen> {
     return Container(
       width: double.infinity,
       height: double.infinity,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            kTicinoRed,
-            kTicinoBlue,
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-      ),
+      decoration: AppDecoration.build(context),
       child: current,
     );
   }
@@ -59,62 +47,12 @@ class _CouponsScreenState extends State<CouponsScreen> {
     setState(() {
       _isLoading = true;
     });
-    final authenticatedUser = FirebaseAuth.instance.currentUser!;
-    final couponsRef = db.collection('coupons');
-    List<CouponBO> readCoupons = [];
 
-    await couponsRef
-        .where('userId', isEqualTo: authenticatedUser.uid)
-        .where('used', isEqualTo: false)
-        .get()
-        .then((snapshot) async {
-      for (var item in snapshot.docs) {
-        final data = item.data();
-        final coupon = Coupon(
-            item.id,
-            data['userId'],
-            item.data()['customerId'],
-            item.data()['campaignId'],
-            item.data()['value'].toDouble(),
-            item.data()['issuedAt']);
-        CouponBO couponBO = CouponBO(
-          coupon: coupon,
-          supplier: await _getSupplier(coupon.customerId),
-          campaign: await _getCampaign(
-            coupon.customerId,
-            coupon.campaignId,
-          ),
-        );
-        readCoupons.add(couponBO);
-      }
-    });
+    List<CouponBO> readCoupons = await AppFirestore().getCoupons();
+
     setState(() {
       userCoupons = readCoupons.toList();
       _isLoading = false;
     });
-  }
-
-  Future<Supplier> _getSupplier(String supplierId) async {
-    final supplierRef = db.collection('suppliers').doc(supplierId);
-    return await supplierRef.get().then(
-      (doc) async {
-        final data = doc.data();
-        return Supplier(data?['name']);
-      },
-    );
-  }
-
-  Future<Campaign> _getCampaign(String supplierId, String campaignId) async {
-    final campaignRef = db
-        .collection('suppliers')
-        .doc(supplierId)
-        .collection('campaigns')
-        .doc(campaignId);
-    return await campaignRef.get().then(
-      (doc) async {
-        final data = doc.data();
-        return Campaign(data?['name']);
-      },
-    );
   }
 }

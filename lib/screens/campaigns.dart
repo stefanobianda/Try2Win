@@ -1,11 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:try2win/models/campaign.dart';
-import 'package:try2win/models/campaign_bo.dart';
-import 'package:try2win/models/purchase.dart';
-import 'package:try2win/models/supplier.dart';
-import 'package:try2win/themes/app_theme.dart';
+import 'package:try2win/business/app_firestore.dart';
+import 'package:try2win/business/campaign_bo.dart';
+import 'package:try2win/widgets/app_decoration.dart';
 import 'package:try2win/widgets/campaigns_list.dart';
 
 class CampaignsScreen extends StatefulWidget {
@@ -41,16 +38,7 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
     return Container(
       width: double.infinity,
       height: double.infinity,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            kTicinoRed,
-            kTicinoBlue,
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-      ),
+      decoration: AppDecoration.build(context),
       child: current,
     );
   }
@@ -59,60 +47,12 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
     setState(() {
       _isLoading = true;
     });
-    final authenticatedUser = FirebaseAuth.instance.currentUser!;
-    final purchasesRef = db.collection('purchases');
-    List<CampaignBO> readCampaigns = [];
 
-    await purchasesRef
-        .where('userId', isEqualTo: authenticatedUser.uid)
-        .get()
-        .then((snapshot) async {
-      for (var item in snapshot.docs) {
-        final data = item.data();
-        final purchase = Purchase(
-            item.id,
-            data['userId'],
-            item.data()['supplierId'],
-            item.data()['campaignId'],
-            item.data()['createdAt']);
-        CampaignBO campaignBO = CampaignBO(
-          purchase: purchase,
-          supplier: await _getSupplier(purchase.supplierId),
-          campaign: await _getCampaign(
-            purchase.supplierId,
-            purchase.campaignId,
-          ),
-        );
-        readCampaigns.add(campaignBO);
-      }
-    });
+    List<CampaignBO> readCampaigns = await AppFirestore().getUserCampaign();
+
     setState(() {
       userCampaigns = readCampaigns.toList();
       _isLoading = false;
     });
-  }
-
-  Future<Supplier> _getSupplier(String supplierId) async {
-    final supplierRef = db.collection('suppliers').doc(supplierId);
-    return await supplierRef.get().then(
-      (doc) async {
-        final data = doc.data();
-        return Supplier(data?['name']);
-      },
-    );
-  }
-
-  Future<Campaign> _getCampaign(String supplierId, String campaignId) async {
-    final campaignRef = db
-        .collection('suppliers')
-        .doc(supplierId)
-        .collection('campaigns')
-        .doc(campaignId);
-    return await campaignRef.get().then(
-      (doc) async {
-        final data = doc.data();
-        return Campaign(data?['name']);
-      },
-    );
   }
 }

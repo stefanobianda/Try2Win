@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:try2win/themes/app_theme.dart';
+import 'package:try2win/widgets/app_decoration.dart';
 import 'package:try2win/widgets/show_qrcode.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -11,16 +11,7 @@ class HomeScreen extends StatelessWidget {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              kTicinoRed,
-              kTicinoBlue,
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
+        decoration: AppDecoration.build(context),
         child: const Column(
           children: [
             Text("Home Screen"),
