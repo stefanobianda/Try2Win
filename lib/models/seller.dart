@@ -1,16 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Supplier {
-  Supplier({required this.title});
+class Seller {
+  Seller({required this.title});
 
   final String title;
 
-  factory Supplier.fromFirestore(
+  factory Seller.fromFirestore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
     SnapshotOptions? options,
   ) {
     final data = snapshot.data();
-    return Supplier(
+    return Seller(
       title: data?['name'],
     );
   }

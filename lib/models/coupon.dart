@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Coupon {
   Coupon(
       {this.couponId,
-      required this.userId,
+      required this.sellerId,
       required this.customerId,
       required this.campaignId,
       required this.value,
@@ -12,7 +12,7 @@ class Coupon {
       required this.used});
 
   String? couponId;
-  final String userId;
+  final String sellerId;
   final String customerId;
   final String campaignId;
   final double value;
@@ -27,7 +27,7 @@ class Coupon {
     final data = snapshot.data();
     return Coupon(
       // couponId: data?['couponId'],
-      userId: data?['userId'],
+      sellerId: data?['sellerId'],
       customerId: data?['customerId'],
       campaignId: data?['campaignId'],
       value: (data?['value']).toDouble(),
@@ -40,7 +40,7 @@ class Coupon {
   Map<String, dynamic> toFirestore() {
     return {
       // "couponId": couponId,
-      "userId": userId,
+      "sellerId": sellerId,
       "customerId": customerId,
       "campaignId": campaignId,
       "value": value,

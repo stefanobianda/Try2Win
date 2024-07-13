@@ -1,6 +1,6 @@
 import 'package:try2win/models/campaign.dart';
 import 'package:try2win/models/coupon.dart';
-import 'package:try2win/models/supplier.dart';
+import 'package:try2win/models/seller.dart';
 
 class CouponBO {
   CouponBO({
@@ -10,6 +10,6 @@ class CouponBO {
   });
 
   final Coupon coupon;
-  final Supplier supplier;
+  final Seller supplier;
   final Campaign campaign;
 }

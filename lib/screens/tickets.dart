@@ -1,19 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:try2win/business/app_firestore.dart';
-import 'package:try2win/business/campaign_bo.dart';
+import 'package:try2win/business/ticket_bo.dart';
 import 'package:try2win/widgets/app_decoration.dart';
-import 'package:try2win/widgets/campaigns_list.dart';
+import 'package:try2win/widgets/tickets_list.dart';
 
-class CampaignsScreen extends StatefulWidget {
-  const CampaignsScreen({super.key});
+class TicketsScreen extends StatefulWidget {
+  const TicketsScreen({super.key});
 
   @override
-  State<CampaignsScreen> createState() => _CampaignsScreenState();
+  State<TicketsScreen> createState() => _TicketsScreenState();
 }
 
-class _CampaignsScreenState extends State<CampaignsScreen> {
-  List<CampaignBO> userCampaigns = [];
+class _TicketsScreenState extends State<TicketsScreen> {
+  List<TicketBO> userTickets = [];
 
   final db = FirebaseFirestore.instance;
   var _isLoaded = false;
@@ -22,13 +22,12 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
   @override
   Widget build(BuildContext context) {
     if (!_isLoaded) {
-      _getCampaigns();
+      _getTickets();
       _isLoaded = true;
     }
-    Widget current =
-        const Text('Go to a resturant and get the chance to win a coupons!');
-    if (userCampaigns.isNotEmpty) {
-      current = CampaignList(campaignList: userCampaigns);
+    Widget current = const Text('Go to a resturant and register a ticket!');
+    if (userTickets.isNotEmpty) {
+      current = TicketList(ticketList: userTickets);
     }
     if (_isLoading) {
       current = const Center(
@@ -43,15 +42,15 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
     );
   }
 
-  Future<void> _getCampaigns() async {
+  Future<void> _getTickets() async {
     setState(() {
       _isLoading = true;
     });
 
-    List<CampaignBO> readCampaigns = await AppFirestore().getUserCampaign();
+    List<TicketBO> readTickets = await AppFirestore().getUserTickets();
 
     setState(() {
-      userCampaigns = readCampaigns.toList();
+      userTickets = readTickets.toList();
       _isLoading = false;
     });
   }

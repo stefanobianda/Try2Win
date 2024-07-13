@@ -2,17 +2,57 @@ import 'dart:collection';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:try2win/business/campaign_bo.dart';
 import 'package:try2win/business/coupon_bo.dart';
+import 'package:try2win/business/ticket_bo.dart';
 import 'package:try2win/models/campaign.dart';
 import 'package:try2win/models/coupon.dart';
-import 'package:try2win/models/purchase.dart';
-import 'package:try2win/models/supplier.dart';
+import 'package:try2win/models/customer.dart';
+import 'package:try2win/models/ticket.dart';
+import 'package:try2win/models/seller.dart';
 
 class AppFirestore {
   final db = FirebaseFirestore.instance;
 
-  HashMap<String, Supplier> supplierMap = HashMap<String, Supplier>();
+  HashMap<String, Seller> sellerMap = HashMap<String, Seller>();
+
+  Future<Customer> getCustomer() async {
+    final authenticatedUser = FirebaseAuth.instance.currentUser!;
+    final customerRef = db
+        .collection('customers')
+        .where('uuid', isEqualTo: authenticatedUser.uid)
+        .withConverter(
+          fromFirestore: Customer.fromFirestore,
+          toFirestore: (Customer customer, _) => customer.toFirestore(),
+        );
+    final docSnap = await customerRef.get();
+    var customer = docSnap.docs.first.data();
+    return customer;
+  }
+
+  Future<List<TicketBO>> getUserTickets() async {
+    final customer = await getCustomer();
+    final ticketsRef = db
+        .collection('tickets')
+        .where('customerId', isEqualTo: customer.customerId)
+        .withConverter(
+          fromFirestore: Ticket.fromFirestore,
+          toFirestore: (Ticket ticket, _) => ticket.toFirestore(),
+        );
+    List<TicketBO> readTickets = [];
+    final docSnap = await ticketsRef.get();
+    for (var item in docSnap.docs) {
+      final ticket = item.data();
+      TicketBO ticketBO = TicketBO(
+        ticket: ticket,
+        seller: await AppFirestore().getSeller(
+          ticket.sellerId,
+        ),
+        customer: customer,
+      );
+      readTickets.add(ticketBO);
+    }
+    return readTickets;
+  }
 
   Future<Campaign> getCampaign(String supplierId, String campaignId) async {
     final campaignRef = db
@@ -30,28 +70,27 @@ class AppFirestore {
     return campaign;
   }
 
-  Future<Supplier> getSupplier(String supplierId) async {
-    final supplierRef =
-        db.collection('suppliers').doc(supplierId).withConverter(
-              fromFirestore: Supplier.fromFirestore,
-              toFirestore: (Supplier supplier, _) => supplier.toFirestore(),
-            );
-    if (supplierMap.containsKey(supplierId)) {
-      return supplierMap[supplierId]!;
+  Future<Seller> getSeller(String sellerId) async {
+    final sellerRef = db.collection('sellers').doc(sellerId).withConverter(
+          fromFirestore: Seller.fromFirestore,
+          toFirestore: (Seller seller, _) => seller.toFirestore(),
+        );
+    if (sellerMap.containsKey(sellerId)) {
+      return sellerMap[sellerId]!;
     }
-    final docSnap = await supplierRef.get();
-    var supplier = docSnap.data();
-    supplier ??= Supplier(title: 'Not Found');
-    supplierMap[supplierId] = supplier;
-    return supplier;
+    final docSnap = await sellerRef.get();
+    var seller = docSnap.data();
+    seller ??= Seller(title: 'Not Found');
+    sellerMap[sellerId] = seller;
+    return seller;
   }
 
   Future<List<CouponBO>> getCoupons() async {
-    final authenticatedUser = FirebaseAuth.instance.currentUser!;
+    final customer = await getCustomer();
     List<CouponBO> readCoupons = [];
     final couponsRef = db
         .collection('coupons')
-        .where('userId', isEqualTo: authenticatedUser.uid)
+        .where('customerId', isEqualTo: customer.customerId)
         .where('used', isEqualTo: false)
         .withConverter(
           fromFirestore: Coupon.fromFirestore,
@@ -63,42 +102,14 @@ class AppFirestore {
       coupon.couponId = item.id;
       CouponBO couponBO = CouponBO(
         coupon: coupon,
-        supplier: await getSupplier(coupon.customerId),
+        supplier: await getSeller(coupon.sellerId),
         campaign: await getCampaign(
-          coupon.customerId,
+          coupon.sellerId,
           coupon.campaignId,
         ),
       );
       readCoupons.add(couponBO);
     }
     return readCoupons;
-  }
-
-  Future<List<CampaignBO>> getUserCampaign() async {
-    final authenticatedUser = FirebaseAuth.instance.currentUser!;
-    final purchasesRef = db
-        .collection('purchases')
-        .where('userId', isEqualTo: authenticatedUser.uid)
-        .withConverter(
-          fromFirestore: Purchase.fromFirestore,
-          toFirestore: (Purchase purchase, _) => purchase.toFirestore(),
-        );
-    List<CampaignBO> readCampaigns = [];
-    final docSnap = await purchasesRef.get();
-    for (var item in docSnap.docs) {
-      final purchase = item.data();
-      CampaignBO campaignBO = CampaignBO(
-        purchase: purchase,
-        supplier: await AppFirestore().getSupplier(
-          purchase.supplierId,
-        ),
-        campaign: await AppFirestore().getCampaign(
-          purchase.supplierId,
-          purchase.campaignId,
-        ),
-      );
-      readCampaigns.add(campaignBO);
-    }
-    return readCampaigns;
   }
 }

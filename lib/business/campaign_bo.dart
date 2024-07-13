@@ -1,6 +1,6 @@
 import 'package:try2win/models/campaign.dart';
-import 'package:try2win/models/purchase.dart';
-import 'package:try2win/models/supplier.dart';
+import 'package:try2win/models/ticket.dart';
+import 'package:try2win/models/seller.dart';
 
 class CampaignBO {
   CampaignBO({
@@ -9,7 +9,7 @@ class CampaignBO {
     required this.campaign,
   });
 
-  final Purchase purchase;
-  final Supplier supplier;
+  final Ticket purchase;
+  final Seller supplier;
   final Campaign campaign;
 }

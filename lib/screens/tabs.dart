@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:try2win/screens/coupons.dart';
 import 'package:try2win/screens/home.dart';
-import 'package:try2win/screens/campaigns.dart';
+import 'package:try2win/screens/tickets.dart';
 
 class TabsScreen extends StatefulWidget {
   const TabsScreen({super.key});
@@ -28,7 +28,7 @@ class _TabsScreenState extends State<TabsScreen> {
     var activePageTitle = 'Home';
 
     if (selectedPageIndex == 1) {
-      activePage = const CampaignsScreen();
+      activePage = const TicketsScreen();
       activePageTitle = 'Campaigns';
     }
 
@@ -63,7 +63,7 @@ class _TabsScreenState extends State<TabsScreen> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.shop_two),
-            label: 'Campaigns',
+            label: 'Tickets',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.card_giftcard),
