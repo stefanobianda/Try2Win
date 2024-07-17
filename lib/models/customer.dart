@@ -26,4 +26,8 @@ class Customer {
       if (sellerId != null) 'sellerId': sellerId,
     };
   }
+
+  bool isSeller() {
+    return sellerId != null;
+  }
 }

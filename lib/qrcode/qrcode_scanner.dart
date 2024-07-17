@@ -40,7 +40,7 @@ class QrCodeScanner extends StatelessWidget {
 
                 await controller
                     .stop()
-                    .then((value) => controller.dispose())
+                    //  .then((value) => controller.dispose())
                     .then((value) => Navigator.of(context).pop());
               }
             },

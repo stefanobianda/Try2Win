@@ -29,7 +29,7 @@ class _TabsScreenState extends State<TabsScreen> {
 
     if (selectedPageIndex == 1) {
       activePage = const TicketsScreen();
-      activePageTitle = 'Campaigns';
+      activePageTitle = 'Tickets';
     }
 
     if (selectedPageIndex == 2) {

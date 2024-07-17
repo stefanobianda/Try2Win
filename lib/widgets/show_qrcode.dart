@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:try2win/business/app_firestore.dart';
 import 'package:try2win/screens/qrcode.dart';
 
 class ShowQRCode extends StatelessWidget {
@@ -12,11 +13,13 @@ class ShowQRCode extends StatelessWidget {
           height: 16,
         ),
         ElevatedButton(
-          onPressed: () {
+          onPressed: () async {
+            final customer = await AppFirestore().getCustomer();
             Navigator.push(
+              // ignore: use_build_context_synchronously
               context,
               MaterialPageRoute(
-                builder: (ctx) => const QRCodeScreen(),
+                builder: (ctx) => QRCodeScreen(customer: customer),
               ),
             );
           },
