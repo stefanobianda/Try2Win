@@ -17,6 +17,10 @@ class AppFirestore {
 
   Future<Customer> getCustomer() async {
     final authenticatedUser = FirebaseAuth.instance.currentUser!;
+    return getCustomerByUser(authenticatedUser);
+  }
+
+  Future<Customer> getCustomerByUser(User authenticatedUser) async {
     final customerRef = db
         .collection('customers')
         .where('uuid', isEqualTo: authenticatedUser.uid)
@@ -27,6 +31,13 @@ class AppFirestore {
     final docSnap = await customerRef.get();
     var customer = docSnap.docs.first.data();
     return customer;
+  }
+
+  createCustomerByUser(User authenticatedUser) async {
+    final data = await db.collection('customers').add({
+      'uuid': authenticatedUser.uid,
+    });
+    await data.update({'customerId': data.id});
   }
 
   Future<List<TicketBO>> getUserTickets() async {
@@ -85,8 +96,8 @@ class AppFirestore {
     return seller;
   }
 
-  Future<List<CouponBO>> getCoupons() async {
-    final customer = await getCustomer();
+  Future<List<CouponBO>> getCoupons(Customer? customer) async {
+    customer ??= await getCustomer();
     List<CouponBO> readCoupons = [];
     final couponsRef = db
         .collection('coupons')

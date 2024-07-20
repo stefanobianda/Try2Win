@@ -37,7 +37,7 @@ class CouponDetailScreen extends StatelessWidget {
                 height: 30,
               ),
               QrImageView(
-                data: couponBO.coupon.couponId!,
+                data: couponBO.getQRCode(),
                 version: QrVersions.auto,
                 size: 300,
                 backgroundColor: Colors.white,

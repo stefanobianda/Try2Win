@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:try2win/business/app_firestore.dart';
 
 final _firebase = FirebaseAuth.instance;
 
@@ -27,7 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
     _form.currentState!.save();
     try {
       if (_isLogin) {
-        final useerCredentials = await _firebase.signInWithEmailAndPassword(
+        final userCredentials = await _firebase.signInWithEmailAndPassword(
           email: _enteredEamil,
           password: _enteredPassword,
         );
@@ -36,10 +37,13 @@ class _LoginScreenState extends State<LoginScreen> {
           email: _enteredEamil,
           password: _enteredPassword,
         );
+        if (userCredentials.user != null) {
+          await AppFirestore().createCustomerByUser(userCredentials.user!);
+        }
       } else {
         throw FirebaseAuthException(
           code: 'confirm-password-different',
-          message: 'Confirm Password is nopt the same!',
+          message: 'Confirm Password is not the same!',
         );
       }
     } on FirebaseAuthException catch (error) {

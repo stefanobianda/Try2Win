@@ -1,18 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:try2win/business/app_firestore.dart';
 import 'package:try2win/business/coupon_bo.dart';
+import 'package:try2win/providers/customer_notifier.dart';
 import 'package:try2win/widgets/app_decoration.dart';
 import 'package:try2win/widgets/coupons_list.dart';
 
-class CouponsScreen extends StatefulWidget {
+class CouponsScreen extends ConsumerStatefulWidget {
   const CouponsScreen({super.key});
 
   @override
-  State<CouponsScreen> createState() => _CouponsScreenState();
+  ConsumerState<CouponsScreen> createState() => _CouponsScreenState();
 }
 
-class _CouponsScreenState extends State<CouponsScreen> {
+class _CouponsScreenState extends ConsumerState<CouponsScreen> {
   List<CouponBO> userCoupons = [];
 
   final db = FirebaseFirestore.instance;
@@ -48,7 +50,9 @@ class _CouponsScreenState extends State<CouponsScreen> {
       _isLoading = true;
     });
 
-    List<CouponBO> readCoupons = await AppFirestore().getCoupons();
+    final customer = ref.read(customerProvider.notifier).getCustomer();
+
+    List<CouponBO> readCoupons = await AppFirestore().getCoupons(customer);
 
     setState(() {
       userCoupons = readCoupons.toList();

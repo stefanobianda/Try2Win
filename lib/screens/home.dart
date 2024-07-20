@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:try2win/widgets/app_decoration.dart';
-import 'package:try2win/widgets/show_qrcode.dart';
+import 'package:try2win/widgets/customer_qrcode.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -18,7 +18,10 @@ class HomeScreen extends StatelessWidget {
             SizedBox(
               height: 20,
             ),
-            ShowQRCode(),
+            CustomerQRCode(),
+            SizedBox(
+              height: 20,
+            ),
           ],
         ),
       ),
