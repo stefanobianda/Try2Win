@@ -16,23 +16,22 @@ class HomeScreen extends StatelessWidget {
         decoration: AppDecoration.build(context),
         child: const Column(
           children: [
-            Text("Home Screen"),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                SellerQRCode(),
+              ],
+            ),
             SizedBox(
-              height: 20,
+              height: 32,
             ),
             CustomerQRCode(),
             SizedBox(
               height: 20,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ReadQRCode(),
-                SizedBox(
-                  width: 10,
-                ),
-                SellerQRCode(),
-              ],
+            ReadQRCode(),
+            SizedBox(
+              width: 16,
             ),
           ],
         ),

@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -34,10 +35,11 @@ class AppFirestore {
   }
 
   createCustomerByUser(User authenticatedUser) async {
-    final data = await db.collection('customers').add({
+    final data = db.collection('customers').doc();
+    await data.set({
       'uuid': authenticatedUser.uid,
+      'customerId': data.id,
     });
-    await data.update({'customerId': data.id});
   }
 
   Future<List<TicketBO>> getUserTickets() async {
@@ -91,7 +93,8 @@ class AppFirestore {
     }
     final docSnap = await sellerRef.get();
     var seller = docSnap.data();
-    seller ??= Seller(title: 'Not Found');
+    seller ??=
+        Seller(title: 'Not Found', isProcessing: false, ticketLimit: 1000);
     sellerMap[sellerId] = seller;
     return seller;
   }
@@ -100,8 +103,9 @@ class AppFirestore {
     customer ??= await getCustomer();
     List<CouponBO> readCoupons = [];
     final couponsRef = db
+        .collection('customers')
+        .doc(customer.customerId)
         .collection('coupons')
-        .where('customerId', isEqualTo: customer.customerId)
         .where('used', isEqualTo: false)
         .withConverter(
           fromFirestore: Coupon.fromFirestore,
@@ -122,5 +126,100 @@ class AppFirestore {
       readCoupons.add(couponBO);
     }
     return readCoupons;
+  }
+
+  Future<void> processTicket(customerId, sellerId) async {
+    final data = db.collection('tickets').doc();
+    await data.set({
+      'ticketId': data.id,
+      'customerId': customerId,
+      'sellerId': sellerId,
+      'createdAt': Timestamp.now(),
+    });
+    final snapshot = await db
+        .collection('tickets')
+        .where('sellerId', isEqualTo: sellerId)
+        .count()
+        .get();
+    if (snapshot.count != null && snapshot.count! >= 10) {
+      print('Start processing: ${Timestamp.now()}');
+      final seller = await getSeller(sellerId);
+      if (!seller.isProcessingCampaign()) {
+        print('Run processing: ${Timestamp.now()}');
+        setSellerProcessing(sellerId, true);
+        await processNewWin(sellerId);
+        setSellerProcessing(sellerId, false);
+      }
+      print('End processing: ${Timestamp.now()}');
+    }
+  }
+
+  Future<void> processCoupon(
+      String couponId, String sellerId, String campaignId) async {
+    db.collection('coupons').doc(couponId).update({
+      'used': true,
+      'usedAt': Timestamp.now(),
+    });
+  }
+
+  Future<void> processNewWin(sellerId) async {
+    final sellerRef = db
+        .collection('tickets')
+        .where('sellerId', isEqualTo: sellerId)
+        .orderBy('createdAt', descending: false)
+        .withConverter(
+          fromFirestore: Ticket.fromFirestore,
+          toFirestore: (Ticket ticket, _) => ticket.toFirestore(),
+        );
+    final docSnap = await sellerRef.get();
+    List<Ticket> ticketList = [];
+    List<Ticket> winnerList = [];
+    int count = 0;
+    for (var item in docSnap.docs) {
+      if (count++ < 10) {
+        Ticket ticket = item.data();
+        ticketList.add(ticket);
+      }
+    }
+    winnerList.add(ticketList[Random().nextInt(10)]);
+    winnerList.add(ticketList[Random().nextInt(10)]);
+    winnerList.add(ticketList[Random().nextInt(10)]);
+    winnerList.shuffle();
+    Ticket winner = winnerList[0];
+    final fromRef = db.collection('tickets');
+    final toRef =
+        db.collection('sellers').doc(sellerId).collection('camapaigns').doc();
+    await toRef.set({
+      'createdAt': Timestamp.now(),
+      'campaignId': toRef.id,
+    });
+    for (Ticket ticket in ticketList) {
+      toRef
+          .collection('tickets')
+          .doc(ticket.ticketId)
+          .set(ticket.toFirestore());
+      fromRef.doc(ticket.ticketId).delete();
+    }
+    toRef.collection('winner').add(winner.toFirestore());
+    final winRef = db
+        .collection('customers')
+        .doc(winner.customerId)
+        .collection('coupons')
+        .doc();
+    winRef.set(Coupon(
+            sellerId: sellerId,
+            customerId: winner.customerId,
+            campaignId: toRef.id,
+            value: 50,
+            issuedAt: Timestamp.now(),
+            used: false)
+        .toFirestore());
+  }
+
+  void setSellerProcessing(sellerId, bool isProcessing) {
+    db
+        .collection('sellers')
+        .doc(sellerId)
+        .update({'isProcessing': isProcessing});
   }
 }

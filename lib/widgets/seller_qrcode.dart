@@ -12,7 +12,7 @@ class SellerQRCode extends ConsumerWidget {
     return Column(
       children: [
         if (customer != null && customer.isSeller())
-          ElevatedButton(
+          OutlinedButton(
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
@@ -20,7 +20,7 @@ class SellerQRCode extends ConsumerWidget {
                 ),
               );
             },
-            child: const Text('Show seller QR code'),
+            child: const Text('Show your seller QR code'),
           ),
       ],
     );

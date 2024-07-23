@@ -1,7 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:try2win/business/app_firestore.dart';
 import 'package:try2win/business/configuration.dart';
 import 'package:try2win/models/customer.dart';
 import 'package:try2win/providers/customer_notifier.dart';
@@ -17,8 +17,6 @@ class ReadQRCode extends ConsumerStatefulWidget {
 }
 
 class _ReadQRCodeState extends ConsumerState<ReadQRCode> {
-  final db = FirebaseFirestore.instance;
-
   Customer? customer;
 
   final MobileScannerController controller = MobileScannerController(
@@ -96,7 +94,8 @@ class _ReadQRCodeState extends ConsumerState<ReadQRCode> {
       if (customer!.isSeller()) {
         if (readSellerId != null && readCampaignId != null) {
           if (customer!.sellerId == readSellerId) {
-            _processCoupon(readCouponId, readSellerId, readCampaignId);
+            AppFirestore()
+                .processCoupon(readCouponId, readSellerId, readCampaignId);
           } else {
             feedback = 'You are not the owner of this coupon!';
           }
@@ -108,13 +107,15 @@ class _ReadQRCodeState extends ConsumerState<ReadQRCode> {
       }
     } else if (readSellerId != null) {
       if (customer!.isSeller()) {
-        _processTicket(customer!.customerId, readSellerId);
+        //_processTicket(customer!.customerId, readSellerId);
+        feedback =
+            'You are a seller and you read a seller QR code, please decide your role';
       } else {
-        _processTicket(customer!.customerId, readSellerId);
+        AppFirestore().processTicket(customer!.customerId, readSellerId);
       }
     } else if (readCustomerId != null) {
       if (customer!.isSeller()) {
-        _processTicket(readCustomerId, customer!.sellerId);
+        AppFirestore().processTicket(readCustomerId, customer!.sellerId);
       } else {
         feedback = 'You cannot process this QR code!';
       }
@@ -133,21 +134,5 @@ class _ReadQRCodeState extends ConsumerState<ReadQRCode> {
         content: Text(feedback.isEmpty ? 'Registration OK' : feedback),
       ),
     );
-  }
-
-  Future<void> _processTicket(customerId, sellerId) async {
-    db.collection('tickets').add({
-      'customerId': customerId,
-      'sellerId': sellerId,
-      'createdAt': Timestamp.now(),
-    });
-  }
-
-  Future<void> _processCoupon(
-      String couponId, String sellerId, String campaignId) async {
-    db
-        .collection('coupons')
-        .doc(couponId)
-        .update({'used': true, 'usedAt': Timestamp.now()});
   }
 }
