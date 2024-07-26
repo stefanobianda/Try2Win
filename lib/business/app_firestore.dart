@@ -99,10 +99,10 @@ class AppFirestore {
     return seller;
   }
 
-  Future<List<CouponBO>> getCoupons(Customer? customer) async {
+  Future<List<CouponBO>> getCoupons(Customer? customer, bool all) async {
     customer ??= await getCustomer();
     List<CouponBO> readCoupons = [];
-    final couponsRef = db
+    var couponsRef = db
         .collection('customers')
         .doc(customer.customerId)
         .collection('coupons')
@@ -111,6 +111,16 @@ class AppFirestore {
           fromFirestore: Coupon.fromFirestore,
           toFirestore: (Coupon coupon, _) => coupon.toFirestore(),
         );
+    if (all) {
+      couponsRef = db
+          .collection('customers')
+          .doc(customer.customerId)
+          .collection('coupons')
+          .withConverter(
+            fromFirestore: Coupon.fromFirestore,
+            toFirestore: (Coupon coupon, _) => coupon.toFirestore(),
+          );
+    }
     final docSnap = await couponsRef.get();
     for (var item in docSnap.docs) {
       final coupon = item.data();
@@ -142,15 +152,12 @@ class AppFirestore {
         .count()
         .get();
     if (snapshot.count != null && snapshot.count! >= 10) {
-      print('Start processing: ${Timestamp.now()}');
       final seller = await getSeller(sellerId);
       if (!seller.isProcessingCampaign()) {
-        print('Run processing: ${Timestamp.now()}');
         setSellerProcessing(sellerId, true);
         await processNewWin(sellerId);
         setSellerProcessing(sellerId, false);
       }
-      print('End processing: ${Timestamp.now()}');
     }
   }
 

@@ -13,6 +13,8 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _form = GlobalKey<FormState>();
+  final _formEmail = GlobalKey<FormFieldState>();
+
   final TextEditingController _pass = TextEditingController();
 
   var _isLogin = true;
@@ -84,6 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           TextFormField(
+                            key: _formEmail,
                             decoration: const InputDecoration(
                               labelText: 'Email Address',
                             ),
@@ -147,15 +150,41 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             child: Text(_isLogin ? 'Login' : 'Signup'),
                           ),
-                          TextButton(
-                            onPressed: () {
-                              setState(() {
-                                _isLogin = !_isLogin;
-                              });
-                            },
-                            child: Text(_isLogin
-                                ? 'Create an account'
-                                : 'I already have an account.'),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              TextButton(
+                                onPressed: () {
+                                  setState(() {
+                                    _isLogin = !_isLogin;
+                                  });
+                                },
+                                child: Text(_isLogin
+                                    ? 'Create an account'
+                                    : 'I already have an account.'),
+                              ),
+                              const Spacer(),
+                              TextButton(
+                                onPressed: () {
+                                  if (_formEmail.currentState!.validate()) {
+                                    _formEmail.currentState!.save();
+                                    _firebase.sendPasswordResetEmail(
+                                        email: _enteredEamil);
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        duration: const Duration(
+                                          seconds: 2,
+                                        ),
+                                        content: Text(
+                                          'Email sent at $_enteredEamil',
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                },
+                                child: const Text('Forgot password'),
+                              ),
+                            ],
                           ),
                         ],
                       ),
