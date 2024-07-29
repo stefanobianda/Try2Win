@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:try2win/firebase_options.dart';
 import 'package:try2win/screens/login.dart';
 import 'package:try2win/screens/splash.dart';
@@ -12,7 +13,9 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const Try2WinApp());
+  runApp(
+    const ProviderScope(child: Try2WinApp()),
+  );
 }
 
 class Try2WinApp extends StatelessWidget {

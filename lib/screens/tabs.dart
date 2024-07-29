@@ -1,19 +1,21 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:try2win/providers/customer_notifier.dart';
 import 'package:try2win/screens/coupons.dart';
 import 'package:try2win/screens/home.dart';
-import 'package:try2win/screens/campaigns.dart';
+import 'package:try2win/screens/tickets.dart';
 
-class TabsScreen extends StatefulWidget {
+class TabsScreen extends ConsumerStatefulWidget {
   const TabsScreen({super.key});
 
   @override
-  State<TabsScreen> createState() {
+  ConsumerState<TabsScreen> createState() {
     return _TabsScreenState();
   }
 }
 
-class _TabsScreenState extends State<TabsScreen> {
+class _TabsScreenState extends ConsumerState<TabsScreen> {
   int selectedPageIndex = 0;
 
   void selectPage(int index) {
@@ -28,8 +30,8 @@ class _TabsScreenState extends State<TabsScreen> {
     var activePageTitle = 'Home';
 
     if (selectedPageIndex == 1) {
-      activePage = const CampaignsScreen();
-      activePageTitle = 'Campaigns';
+      activePage = const TicketsScreen();
+      activePageTitle = 'Tickets';
     }
 
     if (selectedPageIndex == 2) {
@@ -44,6 +46,7 @@ class _TabsScreenState extends State<TabsScreen> {
           IconButton(
             onPressed: () {
               FirebaseAuth.instance.signOut();
+              ref.read(customerProvider.notifier).resetCustomer();
             },
             icon: Icon(
               Icons.exit_to_app,
@@ -63,7 +66,7 @@ class _TabsScreenState extends State<TabsScreen> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.shop_two),
-            label: 'Campaigns',
+            label: 'Tickets',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.card_giftcard),

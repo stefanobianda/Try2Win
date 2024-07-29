@@ -17,13 +17,17 @@ class CouponsList extends StatelessWidget {
             title: Container(
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(Radius.circular(10)),
-                color: Theme.of(ctx).colorScheme.primary.withOpacity(0.5),
+                color: couponsList[index].coupon.used == true
+                    ? Theme.of(ctx).colorScheme.secondary.withOpacity(0.5)
+                    : Theme.of(ctx).colorScheme.primary.withOpacity(0.5),
               ),
               margin: const EdgeInsets.all(5),
               child: Column(
                 children: [
                   Text(couponsList[index].supplier.title),
                   Text(couponsList[index].campaign.title ?? 'Not Found'),
+                  if (couponsList[index].coupon.used == true)
+                    const Text('Already used'),
                 ],
               ),
             ),

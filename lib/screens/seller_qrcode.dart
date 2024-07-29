@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:try2win/business/coupon_bo.dart';
+import 'package:try2win/business/configuration.dart';
+import 'package:try2win/models/customer.dart';
 import 'package:try2win/widgets/app_decoration.dart';
 
-class CouponDetailScreen extends StatelessWidget {
-  const CouponDetailScreen({super.key, required this.couponBO});
+class SellerQRCodeScreen extends StatelessWidget {
+  const SellerQRCodeScreen({super.key, required this.customer});
 
-  final CouponBO couponBO;
+  final Customer customer;
 
   @override
   Widget build(BuildContext context) {
-    var date = DateFormat("EEE, d MMM yyyy HH:mm:ss")
-        .format(couponBO.coupon.issuedAt.toDate());
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Coupon Detail"),
+        title: const Text("Seller QR code"),
       ),
       body: Center(
         child: Container(
@@ -24,20 +22,12 @@ class CouponDetailScreen extends StatelessWidget {
           decoration: AppDecoration.build(context),
           child: Column(
             children: [
-              Text('Coupon from ${couponBO.supplier.title}'),
+              const Text('Seller QR code'),
               const SizedBox(
                 height: 10,
-              ),
-              Text('Campaign name ${couponBO.campaign.title}'),
-              const SizedBox(
-                height: 10,
-              ),
-              Text('Issued at $date'),
-              const SizedBox(
-                height: 30,
               ),
               QrImageView(
-                data: couponBO.getQRCode(),
+                data: '${Configuration.SELLER_CODE}=${customer.sellerId}',
                 version: QrVersions.auto,
                 size: 300,
                 backgroundColor: Colors.white,
