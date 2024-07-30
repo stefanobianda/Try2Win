@@ -1,37 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:try2win/providers/customer_notifier.dart';
+import 'package:try2win/screens/seller_qrcode.dart';
 import 'package:try2win/widgets/app_decoration.dart';
-import 'package:try2win/widgets/customer_qrcode.dart';
 import 'package:try2win/widgets/read_qrcode.dart';
-import 'package:try2win/widgets/seller_qrcode.dart';
 
-class SellerHomeScreen extends StatelessWidget {
+class SellerHomeScreen extends ConsumerWidget {
   const SellerHomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final customer = ref.read(customerProvider);
     return Scaffold(
       body: Container(
         width: double.infinity,
         height: double.infinity,
         decoration: AppDecoration.build(context),
-        child: const Column(
+        child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                SellerQRCode(),
-              ],
+            const SizedBox(
+              height: 16,
             ),
-            SizedBox(
+            const Text('Read a QR code to create a ticket'),
+            const SizedBox(
               height: 32,
             ),
-            CustomerQRCode(),
-            SizedBox(
-              height: 20,
+            const ReadQRCode(),
+            const Expanded(
+              child: SizedBox(
+                height: 16,
+              ),
             ),
-            ReadQRCode(),
-            SizedBox(
-              width: 16,
+            OutlinedButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        SellerQRCodeScreen(customer: customer!),
+                  ),
+                );
+              },
+              child: const Text('Show your QR codes'),
+            ),
+            const SizedBox(
+              height: 32,
             ),
           ],
         ),

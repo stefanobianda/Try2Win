@@ -47,9 +47,13 @@ class _ReadQRCodeState extends ConsumerState<ReadQRCode> {
     return Column(
       children: [
         if (customer != null)
-          ElevatedButton(
-            onPressed: _readQRCode,
-            child: const Text('Read QR code'),
+          GestureDetector(
+            onTap: _readQRCode,
+            child: Image.asset(
+              'assets/images/readbarcode.gif',
+              width: 300,
+              height: 300,
+            ),
           ),
         if (_isProcessing)
           const SizedBox(
