@@ -67,6 +67,31 @@ class AppFirestore {
     return readTickets;
   }
 
+  Future<List<TicketBO>> getSellerTickets() async {
+    final customer = await getCustomer();
+    final ticketsRef = db
+        .collection('tickets')
+        .where('sellerId', isEqualTo: customer.sellerId)
+        .withConverter(
+          fromFirestore: Ticket.fromFirestore,
+          toFirestore: (Ticket ticket, _) => ticket.toFirestore(),
+        );
+    List<TicketBO> readTickets = [];
+    final docSnap = await ticketsRef.get();
+    for (var item in docSnap.docs) {
+      final ticket = item.data();
+      TicketBO ticketBO = TicketBO(
+        ticket: ticket,
+        seller: await AppFirestore().getSeller(
+          ticket.sellerId,
+        ),
+        customer: customer,
+      );
+      readTickets.add(ticketBO);
+    }
+    return readTickets;
+  }
+
   Future<Campaign> getCampaign(String supplierId, String campaignId) async {
     final campaignRef = db
         .collection('suppliers')

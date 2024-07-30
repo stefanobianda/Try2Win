@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:try2win/widgets/app_decoration.dart';
 import 'package:try2win/widgets/customer_qrcode.dart';
 import 'package:try2win/widgets/read_qrcode.dart';
+import 'package:try2win/widgets/seller_qrcode.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class SellerHomeScreen extends StatelessWidget {
+  const SellerHomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +16,12 @@ class HomeScreen extends StatelessWidget {
         decoration: AppDecoration.build(context),
         child: const Column(
           children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                SellerQRCode(),
+              ],
+            ),
             SizedBox(
               height: 32,
             ),

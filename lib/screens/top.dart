@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:try2win/models/customer.dart';
@@ -30,7 +29,6 @@ class _TopScreenState extends ConsumerState<TopScreen> {
     Widget activePage = const SplashScreen();
     customer = ref.watch(customerProvider);
 
-    print('Top processed, customer is $customer');
     if (customer != null) {
       if (customer!.isSeller()) {
         activePage = const SellerTabsScreen();

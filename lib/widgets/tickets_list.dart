@@ -28,7 +28,10 @@ class TicketList extends StatelessWidget {
                   Text(
                     DateFormat('dd/MM/yyyy, HH:mm')
                         .format(ticketList[index].ticket.createdAt.toDate()),
-                  )
+                  ),
+                  Text(
+                    ticketList[index].ticket.customerId,
+                  ),
                 ],
               ),
             ),
