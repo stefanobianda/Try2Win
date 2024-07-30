@@ -8,16 +8,16 @@ import 'package:try2win/screens/home.dart';
 import 'package:try2win/screens/splash.dart';
 import 'package:try2win/screens/tickets.dart';
 
-class TabsScreen extends ConsumerStatefulWidget {
-  const TabsScreen({super.key});
+class SellerTabsScreen extends ConsumerStatefulWidget {
+  const SellerTabsScreen({super.key});
 
   @override
-  ConsumerState<TabsScreen> createState() {
-    return _TabsScreenState();
+  ConsumerState<SellerTabsScreen> createState() {
+    return _SellerTabsScreenState();
   }
 }
 
-class _TabsScreenState extends ConsumerState<TabsScreen> {
+class _SellerTabsScreenState extends ConsumerState<SellerTabsScreen> {
   int selectedPageIndex = 0;
 
   Customer? customer;
@@ -32,7 +32,7 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
   Widget build(BuildContext context) {
     customer = ref.watch(customerProvider);
     Widget activePage = const HomeScreen();
-    var activePageTitle = 'Home';
+    var activePageTitle = 'Seller Home';
 
     print('Page Number: $selectedPageIndex');
     if (customer == null) {
@@ -47,7 +47,7 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
 
     if (selectedPageIndex == 2) {
       activePage = const CouponsScreen();
-      activePageTitle = 'Coupons';
+      activePageTitle = 'Campaigns';
     }
 
     return Scaffold(
