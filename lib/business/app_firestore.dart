@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:try2win/business/campaign_bo.dart';
 import 'package:try2win/business/coupon_bo.dart';
 import 'package:try2win/business/ticket_bo.dart';
 import 'package:try2win/models/campaign.dart';
@@ -72,6 +73,7 @@ class AppFirestore {
     final ticketsRef = db
         .collection('tickets')
         .where('sellerId', isEqualTo: customer.sellerId)
+        .orderBy('createdAt')
         .withConverter(
           fromFirestore: Ticket.fromFirestore,
           toFirestore: (Ticket ticket, _) => ticket.toFirestore(),
@@ -92,10 +94,10 @@ class AppFirestore {
     return readTickets;
   }
 
-  Future<Campaign> getCampaign(String supplierId, String campaignId) async {
+  Future<Campaign> getCampaign(String sellerId, String campaignId) async {
     final campaignRef = db
-        .collection('suppliers')
-        .doc(supplierId)
+        .collection('sellers')
+        .doc(sellerId)
         .collection('campaigns')
         .doc(campaignId)
         .withConverter(
@@ -104,7 +106,11 @@ class AppFirestore {
         );
     final docSnap = await campaignRef.get();
     var campaign = docSnap.data();
-    campaign ??= Campaign(title: "NotFound");
+    campaign ??= Campaign(
+      name: "NotFound",
+      createdAt: Timestamp.now(),
+      campaignId: '',
+    );
     return campaign;
   }
 
@@ -122,6 +128,18 @@ class AppFirestore {
         Seller(title: 'Not Found', isProcessing: false, ticketLimit: 1000);
     sellerMap[sellerId] = seller;
     return seller;
+  }
+
+  Future<Ticket> getTicket(String tickedId) async {
+    final ticketRef = db.collection('tickets').doc(tickedId).withConverter(
+          fromFirestore: Ticket.fromFirestore,
+          toFirestore: (Ticket ticket, _) => ticket.toFirestore(),
+        );
+    final docSnap = await ticketRef.get();
+    var ticket = docSnap.data();
+    ticket ??= Ticket(
+        ticketId: '', customerId: '', sellerId: '', createdAt: Timestamp.now());
+    return ticket;
   }
 
   Future<List<CouponBO>> getCoupons(Customer? customer, bool all) async {
@@ -161,6 +179,29 @@ class AppFirestore {
       readCoupons.add(couponBO);
     }
     return readCoupons;
+  }
+
+  Future<List<CampaignBO>> getCampaigns(Customer? customer) async {
+    customer ??= await getCustomer();
+    List<CampaignBO> readCampaigns = [];
+    var campaignsRef = db
+        .collection('sellers')
+        .doc(customer.sellerId)
+        .collection('campaigns')
+        .withConverter(
+          fromFirestore: Campaign.fromFirestore,
+          toFirestore: (Campaign campaign, _) => campaign.toFirestore(),
+        );
+    final docSnap = await campaignsRef.get();
+    for (var item in docSnap.docs) {
+      print('Item cycle start');
+      final campaign = item.data();
+      CampaignBO campaignBO = CampaignBO(
+        campaign: campaign,
+      );
+      readCampaigns.add(campaignBO);
+    }
+    return readCampaigns;
   }
 
   Future<void> processTicket(customerId, sellerId) async {
@@ -220,10 +261,11 @@ class AppFirestore {
     Ticket winner = winnerList[0];
     final fromRef = db.collection('tickets');
     final toRef =
-        db.collection('sellers').doc(sellerId).collection('camapaigns').doc();
+        db.collection('sellers').doc(sellerId).collection('campaigns').doc();
     await toRef.set({
       'createdAt': Timestamp.now(),
       'campaignId': toRef.id,
+      'name': 'NomeNome',
     });
     for (Ticket ticket in ticketList) {
       toRef

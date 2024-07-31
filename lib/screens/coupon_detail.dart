@@ -28,7 +28,7 @@ class CouponDetailScreen extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              Text('Campaign name ${couponBO.campaign.title}'),
+              Text('Campaign name ${couponBO.campaign.name}'),
               const SizedBox(
                 height: 10,
               ),

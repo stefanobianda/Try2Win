@@ -25,7 +25,7 @@ class CouponsList extends StatelessWidget {
               child: Column(
                 children: [
                   Text(couponsList[index].supplier.title),
-                  Text(couponsList[index].campaign.title ?? 'Not Found'),
+                  Text(couponsList[index].campaign.name),
                   if (couponsList[index].coupon.used == true)
                     const Text('Already used'),
                 ],
