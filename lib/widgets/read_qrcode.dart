@@ -42,19 +42,27 @@ class _ReadQRCodeState extends ConsumerState<ReadQRCode> {
 
   @override
   Widget build(BuildContext context) {
-    customer = ref.watch(customerProvider);
+    customer = ref.read(customerProvider);
+
+    Widget currentWidget = ElevatedButton(
+      onPressed: _readQRCode,
+      child: const Text('Read QR code'),
+    );
+
+    if (customer!.isSeller()) {
+      currentWidget = GestureDetector(
+        onTap: _readQRCode,
+        child: Image.asset(
+          'assets/images/readbarcode.gif',
+          width: 300,
+          height: 300,
+        ),
+      );
+    }
 
     return Column(
       children: [
-        if (customer != null)
-          GestureDetector(
-            onTap: _readQRCode,
-            child: Image.asset(
-              'assets/images/readbarcode.gif',
-              width: 300,
-              height: 300,
-            ),
-          ),
+        currentWidget,
         if (_isProcessing)
           const SizedBox(
             height: 12,

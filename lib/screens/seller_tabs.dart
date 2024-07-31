@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:try2win/providers/customer_notifier.dart';
 import 'package:try2win/screens/campaigns.dart';
+import 'package:try2win/screens/coupons.dart';
 import 'package:try2win/screens/seller_home.dart';
 import 'package:try2win/screens/seller_tickets.dart';
 
@@ -39,6 +40,11 @@ class _SellerTabsScreenState extends ConsumerState<SellerTabsScreen> {
       activePageTitle = 'Campaigns';
     }
 
+    if (selectedPageIndex == 3) {
+      activePage = const CouponsScreen();
+      activePageTitle = 'Coupons';
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(activePageTitle),
@@ -57,6 +63,7 @@ class _SellerTabsScreenState extends ConsumerState<SellerTabsScreen> {
       ),
       body: activePage,
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         onTap: selectPage,
         currentIndex: selectedPageIndex,
         items: const [
@@ -71,6 +78,10 @@ class _SellerTabsScreenState extends ConsumerState<SellerTabsScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.assignment_turned_in),
             label: 'Campaign',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.card_giftcard),
+            label: 'Coupons',
           ),
         ],
       ),
