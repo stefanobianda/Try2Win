@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:try2win/firebase_options.dart';
 import 'package:try2win/screens/login.dart';
 import 'package:try2win/screens/splash.dart';
-import 'package:try2win/screens/tabs.dart';
+import 'package:try2win/screens/top.dart';
 import 'package:try2win/themes/app_theme.dart';
 
 void main() async {
@@ -37,7 +37,7 @@ class Try2WinApp extends StatelessWidget {
             return const SplashScreen();
           }
           if (snapshot.hasData) {
-            return const TabsScreen();
+            return const TopScreen();
           }
           return const LoginScreen();
         },

@@ -2,20 +2,21 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:try2win/providers/customer_notifier.dart';
+import 'package:try2win/screens/campaigns.dart';
 import 'package:try2win/screens/coupons.dart';
-import 'package:try2win/screens/home.dart';
-import 'package:try2win/screens/tickets.dart';
+import 'package:try2win/screens/seller_home.dart';
+import 'package:try2win/screens/seller_tickets.dart';
 
-class TabsScreen extends ConsumerStatefulWidget {
-  const TabsScreen({super.key});
+class SellerTabsScreen extends ConsumerStatefulWidget {
+  const SellerTabsScreen({super.key});
 
   @override
-  ConsumerState<TabsScreen> createState() {
-    return _TabsScreenState();
+  ConsumerState<SellerTabsScreen> createState() {
+    return _SellerTabsScreenState();
   }
 }
 
-class _TabsScreenState extends ConsumerState<TabsScreen> {
+class _SellerTabsScreenState extends ConsumerState<SellerTabsScreen> {
   int selectedPageIndex = 0;
 
   void selectPage(int index) {
@@ -26,15 +27,20 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Widget activePage = const HomeScreen();
-    var activePageTitle = 'Home';
+    Widget activePage = const SellerHomeScreen();
+    var activePageTitle = 'Seller Home';
 
     if (selectedPageIndex == 1) {
-      activePage = const TicketsScreen();
+      activePage = const SellerTicketsScreen();
       activePageTitle = 'Tickets';
     }
 
     if (selectedPageIndex == 2) {
+      activePage = const CampaignsScreen();
+      activePageTitle = 'Campaigns';
+    }
+
+    if (selectedPageIndex == 3) {
       activePage = const CouponsScreen();
       activePageTitle = 'Coupons';
     }
@@ -57,6 +63,7 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
       ),
       body: activePage,
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         onTap: selectPage,
         currentIndex: selectedPageIndex,
         items: const [
@@ -69,8 +76,12 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
             label: 'Tickets',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.card_giftcard),
+            icon: Icon(Icons.assignment_turned_in),
             label: 'Campaign',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.card_giftcard),
+            label: 'Coupons',
           ),
         ],
       ),

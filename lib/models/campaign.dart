@@ -1,9 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Campaign {
-  Campaign({this.title});
+  Campaign({
+    required this.name,
+    required this.createdAt,
+    required this.campaignId,
+  });
 
-  final String? title;
+  final String name;
+  final Timestamp createdAt;
+  final String campaignId;
 
   factory Campaign.fromFirestore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
@@ -11,13 +17,17 @@ class Campaign {
   ) {
     final data = snapshot.data();
     return Campaign(
-      title: data?['name'],
+      name: data?['name'],
+      createdAt: data?['createdAt'],
+      campaignId: data?['campaignId'],
     );
   }
 
   Map<String, dynamic> toFirestore() {
     return {
-      if (title != null) "name": title,
+      "name": name,
+      "createdAt": createdAt,
+      "campaignId": campaignId,
     };
   }
 }
