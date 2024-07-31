@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:random_name_generator/random_name_generator.dart';
 import 'package:try2win/business/campaign_bo.dart';
 import 'package:try2win/business/coupon_bo.dart';
 import 'package:try2win/business/ticket_bo.dart';
@@ -194,7 +195,6 @@ class AppFirestore {
         );
     final docSnap = await campaignsRef.get();
     for (var item in docSnap.docs) {
-      print('Item cycle start');
       final campaign = item.data();
       CampaignBO campaignBO = CampaignBO(
         campaign: campaign,
@@ -265,7 +265,7 @@ class AppFirestore {
     await toRef.set({
       'createdAt': Timestamp.now(),
       'campaignId': toRef.id,
-      'name': 'NomeNome',
+      'name': RandomNames(Zone.us).fullName(),
     });
     for (Ticket ticket in ticketList) {
       toRef
