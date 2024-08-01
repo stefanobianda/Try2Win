@@ -227,9 +227,14 @@ class AppFirestore {
     }
   }
 
-  Future<void> processCoupon(
-      String couponId, String sellerId, String campaignId) async {
-    db.collection('coupons').doc(couponId).update({
+  Future<void> processCoupon(String customerId, String couponId,
+      String sellerId, String campaignId) async {
+    db
+        .collection('customers')
+        .doc(customerId)
+        .collection('coupons')
+        .doc(couponId)
+        .update({
       'used': true,
       'usedAt': Timestamp.now(),
     });

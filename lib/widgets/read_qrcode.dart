@@ -104,10 +104,12 @@ class _ReadQRCodeState extends ConsumerState<ReadQRCode> {
     }
     if (readCouponId != null) {
       if (customer!.isSeller()) {
-        if (readSellerId != null && readCampaignId != null) {
+        if (readSellerId != null &&
+            readCampaignId != null &&
+            readCustomerId != null) {
           if (customer!.sellerId == readSellerId) {
-            AppFirestore()
-                .processCoupon(readCouponId, readSellerId, readCampaignId);
+            AppFirestore().processCoupon(
+                readCustomerId, readCouponId, readSellerId, readCampaignId);
           } else {
             feedback = 'You are not the owner of this coupon!';
           }

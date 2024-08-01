@@ -70,7 +70,7 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.card_giftcard),
-            label: 'Campaign',
+            label: 'Coupons',
           ),
         ],
       ),

@@ -15,6 +15,6 @@ class CouponBO {
   final Campaign campaign;
 
   String getQRCode() {
-    return '${Configuration.COUPONS_CODE}=${coupon.couponId};;;${Configuration.SELLER_CODE}=${coupon.sellerId};;;${Configuration.CAMPAIGN_CODE}=${coupon.campaignId}';
+    return '${Configuration.CUSTOMER_CODE}=${coupon.customerId};;;${Configuration.COUPONS_CODE}=${coupon.couponId};;;${Configuration.SELLER_CODE}=${coupon.sellerId};;;${Configuration.CAMPAIGN_CODE}=${coupon.campaignId}';
   }
 }

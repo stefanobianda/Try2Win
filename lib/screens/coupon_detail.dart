@@ -36,12 +36,18 @@ class CouponDetailScreen extends StatelessWidget {
               const SizedBox(
                 height: 30,
               ),
-              QrImageView(
-                data: couponBO.getQRCode(),
-                version: QrVersions.auto,
-                size: 300,
-                backgroundColor: Colors.white,
-              ),
+              if (!couponBO.coupon.used)
+                QrImageView(
+                  data: couponBO.getQRCode(),
+                  version: QrVersions.auto,
+                  size: 300,
+                  backgroundColor: Colors.white,
+                ),
+              if (couponBO.coupon.used)
+                const Text(
+                  'Coupon already used!',
+                  style: TextStyle(fontSize: 32),
+                )
             ],
           ),
         ),
