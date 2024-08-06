@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:try2win/providers/customer_notifier.dart';
 import 'package:try2win/screens/seller_qrcode.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SellerQRCode extends ConsumerWidget {
   const SellerQRCode({super.key});
@@ -20,7 +21,7 @@ class SellerQRCode extends ConsumerWidget {
                 ),
               );
             },
-            child: const Text('Show your seller QR code'),
+            child: Text(AppLocalizations.of(context)!.showQRCode),
           ),
       ],
     );

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:try2win/qrcode/scanned_barcode_label.dart';
 import 'package:try2win/qrcode/scanner_button_widgets.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class QrCodeScanner extends StatelessWidget {
   const QrCodeScanner({
@@ -24,7 +25,7 @@ class QrCodeScanner extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        title: const Text('Scan QR code'),
+        title: Text(AppLocalizations.of(context)!.titleScanQRCode),
       ),
       body: Stack(
         fit: StackFit.expand,

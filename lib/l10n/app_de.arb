@@ -1,8 +1,14 @@
 {
-   "hello":"Ciao",
    "sellerHome": "Händler Home",
+   "seller": "Händler",
+   "customer": "Kunde",
    "tickets": "Billette",
    "campaigns": "Kampagnen",
+   "zeroCampaigns": "Bitten Sie Ihre Kunden, Try2Win beizutreten und zusätzliche Tickets zu registrieren",
    "coupons": "Gutscheine",
-   "zeroCoupons": "Gehen Sie in ein Restaurant und gewinnen Sie einen Gutschein!"
+   "zeroCoupons": "Gehen Sie in ein Restaurant und gewinnen Sie einen Gutschein!",
+   "readQRCode": "Lesen Sie einen QR-Code, um ein Ticket zu erstellen, drücken Sie auf das Bild unten",
+   "showQRCode": "Zeigen Sie Ihren QR-Code",
+   "titleScanQRCode": "QR-Code scannen",
+   "scanSomething": "Einen Try2Win QR-Code lesen"
 } 

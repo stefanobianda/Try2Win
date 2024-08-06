@@ -6,6 +6,7 @@ import 'package:try2win/business/campaign_bo.dart';
 import 'package:try2win/providers/customer_notifier.dart';
 import 'package:try2win/widgets/app_decoration.dart';
 import 'package:try2win/widgets/campaign_list.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CampaignsScreen extends ConsumerStatefulWidget {
   const CampaignsScreen({super.key});
@@ -28,8 +29,7 @@ class _CampaignsScreenState extends ConsumerState<CampaignsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Widget current =
-        const Text('Ask client to register a ticket to complete a round!');
+    Widget current = Text(AppLocalizations.of(context)!.zeroCampaigns);
     if (userCampaigns.isNotEmpty) {
       current = CampaignsList(campaignsList: userCampaigns);
     }

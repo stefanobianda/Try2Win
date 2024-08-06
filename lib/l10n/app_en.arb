@@ -1,8 +1,14 @@
 {
-   "hello": "Hello",
    "sellerHome": "Seller Home",
+   "seller": "Seller",
+   "customer": "Customer",
    "tickets": "Tickets",
    "campaigns": "Campaigns",
+   "zeroCampaigns": "Ask your clients to join Try2Win and register additionals tickets",
    "coupons": "Coupons",
-   "zeroCoupons": "Go to a resturant and get the chance to win a coupons!"
+   "zeroCoupons": "Go to a resturant and get the chance to win a coupons!",
+   "readQRCode": "Read a QR code to create a ticket, press the image below",
+   "showQRCode": "Show your QR code",
+   "titleScanQRCode": "Scan QR code",
+   "scanSomething": "Read a Try2Win QR code"
 }
