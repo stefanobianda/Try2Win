@@ -6,6 +6,7 @@ import 'package:try2win/business/coupon_bo.dart';
 import 'package:try2win/providers/customer_notifier.dart';
 import 'package:try2win/widgets/app_decoration.dart';
 import 'package:try2win/widgets/coupons_list.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CouponsScreen extends ConsumerStatefulWidget {
   const CouponsScreen({super.key});
@@ -29,8 +30,7 @@ class _CouponsScreenState extends ConsumerState<CouponsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Widget current =
-        const Text('Go to a resturant and get the chance to win a coupons!');
+    Widget current = Text(AppLocalizations.of(context)!.zeroCoupons);
     if (userCoupons.isNotEmpty) {
       current = CouponsList(couponsList: userCoupons);
     }
