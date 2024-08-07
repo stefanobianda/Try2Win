@@ -1,0 +1,14 @@
+{
+   "sellerHome": "Home Esercente",
+   "seller": "Esercente",
+   "customer": "Cliente",
+   "tickets": "Biglietti",
+   "campaigns": "Campagne",
+   "zeroCampaigns": "Chiedi ai tuoi clienti di installare Try2Win e registra altri biglietti",
+   "coupons": "Buoni",
+   "zeroCoupons": "Andate in un ristorante e avrete la possibilità di vincere un buono!",
+   "readQRCode": "Leggere un codice QR per creare un biglietto, premi l'immagine sottostante",
+   "showQRCode": "Visualizza il tuo codice QR",
+   "titleScanQRCode": "Scansione del codice QR",
+   "scanSomething": "Leggere un codice QR Try2Win"
+} 

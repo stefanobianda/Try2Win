@@ -3,6 +3,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:try2win/business/configuration.dart';
 import 'package:try2win/models/customer.dart';
 import 'package:try2win/widgets/app_decoration.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 enum Type { seller, customer }
 
@@ -21,10 +22,10 @@ class _SellerQRCodeScreenState extends State<SellerQRCodeScreen> {
   @override
   Widget build(BuildContext context) {
     var qrcode = '${Configuration.SELLER_CODE}=${widget.customer.sellerId}';
-    String text = 'Seller QR code';
+    String text = '${AppLocalizations.of(context)!.seller} QR code';
     if (selectedType == Type.customer) {
       qrcode = '${Configuration.CUSTOMER_CODE}=${widget.customer.customerId}';
-      text = 'Customer QR code';
+      text = '${AppLocalizations.of(context)!.customer} QR code';
     }
     return Scaffold(
       appBar: AppBar(
@@ -54,11 +55,13 @@ class _SellerQRCodeScreenState extends State<SellerQRCodeScreen> {
                 height: 32,
               ),
               SegmentedButton<Type>(
-                segments: const <ButtonSegment<Type>>[
+                segments: <ButtonSegment<Type>>[
                   ButtonSegment<Type>(
-                      value: Type.seller, label: Text('Seller')),
+                      value: Type.seller,
+                      label: Text(AppLocalizations.of(context)!.seller)),
                   ButtonSegment<Type>(
-                      value: Type.customer, label: Text('Customer')),
+                      value: Type.customer,
+                      label: Text(AppLocalizations.of(context)!.customer)),
                 ],
                 onSelectionChanged: (Set<Type> newSelection) {
                   setState(() {

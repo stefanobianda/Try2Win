@@ -1,12 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:try2win/firebase_options.dart';
+import 'package:try2win/providers/locale_notifier.dart';
 import 'package:try2win/screens/login.dart';
 import 'package:try2win/screens/splash.dart';
 import 'package:try2win/screens/top.dart';
 import 'package:try2win/themes/app_theme.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,16 +21,23 @@ void main() async {
   );
 }
 
-class Try2WinApp extends StatelessWidget {
+class Try2WinApp extends ConsumerWidget {
   const Try2WinApp({super.key});
 
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     // var isLoggedIn = false;
-
     return MaterialApp(
       title: 'Try 2 Win',
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: ref.read(localeProvider.notifier).getLocaleList(),
+      locale: ref.watch(localeProvider),
       theme: themeData,
       darkTheme: themeDarkData,
       home: StreamBuilder(

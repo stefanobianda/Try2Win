@@ -1,0 +1,14 @@
+{
+   "sellerHome": "Home Revendeur",
+   "seller": "Revendeur",
+   "customer": "Client",
+   "tickets": "Billets",
+   "campaigns": "Campagnes",
+   "zeroCampaigns": "Demandez à vos clients de s'inscrire à Try2Win et d'enregistrer des billets supplémentaires.",
+   "coupons": "Bons",
+   "zeroCoupons": "Allez dans un restaurant et gagnez des bons!",
+   "readQRCode": "Lisez un code QR pour créer un ticket, appuyez sur l'image ci-dessous",
+   "showQRCode": "Montrez votre code QR",
+   "titleScanQRCode": "Scannez le code QR",
+   "scanSomething": "Lire un code QR Try2Win"
+} 

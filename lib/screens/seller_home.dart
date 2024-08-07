@@ -4,6 +4,7 @@ import 'package:try2win/providers/customer_notifier.dart';
 import 'package:try2win/screens/seller_qrcode.dart';
 import 'package:try2win/widgets/app_decoration.dart';
 import 'package:try2win/widgets/read_qrcode.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SellerHomeScreen extends ConsumerWidget {
   const SellerHomeScreen({super.key});
@@ -21,7 +22,7 @@ class SellerHomeScreen extends ConsumerWidget {
             const SizedBox(
               height: 16,
             ),
-            const Text('Read a QR code to create a ticket'),
+            Text(AppLocalizations.of(context)!.readQRCode),
             const SizedBox(
               height: 32,
             ),
