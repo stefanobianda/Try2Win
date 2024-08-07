@@ -1,10 +1,11 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:try2win/providers/customer_notifier.dart';
 import 'package:try2win/screens/coupons.dart';
 import 'package:try2win/screens/home.dart';
 import 'package:try2win/screens/tickets.dart';
+import 'package:try2win/widgets/locale_menu.dart';
+import 'package:try2win/widgets/sign_out.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TabsScreen extends ConsumerStatefulWidget {
   const TabsScreen({super.key});
@@ -27,50 +28,42 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
   @override
   Widget build(BuildContext context) {
     Widget activePage = const HomeScreen();
-    var activePageTitle = 'Home';
+    var activePageTitle = AppLocalizations.of(context)!.customerHome;
 
     if (selectedPageIndex == 1) {
       activePage = const TicketsScreen();
-      activePageTitle = 'Tickets';
+      activePageTitle = AppLocalizations.of(context)!.tickets;
     }
 
     if (selectedPageIndex == 2) {
       activePage = const CouponsScreen();
-      activePageTitle = 'Coupons';
+      activePageTitle = AppLocalizations.of(context)!.coupons;
     }
 
     return Scaffold(
       appBar: AppBar(
         title: Text(activePageTitle),
-        actions: [
-          IconButton(
-            onPressed: () {
-              FirebaseAuth.instance.signOut();
-              ref.read(customerProvider.notifier).resetCustomer();
-            },
-            icon: Icon(
-              Icons.exit_to_app,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-          )
+        actions: const [
+          LocaleMenu(),
+          SignOut(),
         ],
       ),
       body: activePage,
       bottomNavigationBar: BottomNavigationBar(
         onTap: selectPage,
         currentIndex: selectedPageIndex,
-        items: const [
-          BottomNavigationBarItem(
+        items: [
+          const BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.shop_two),
-            label: 'Tickets',
+            icon: const Icon(Icons.shop_two),
+            label: AppLocalizations.of(context)!.tickets,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.card_giftcard),
-            label: 'Coupons',
+            icon: const Icon(Icons.card_giftcard),
+            label: AppLocalizations.of(context)!.coupons,
           ),
         ],
       ),

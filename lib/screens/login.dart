@@ -30,6 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
     _form.currentState!.save();
     try {
       if (_isLogin) {
+        // ignore: unused_local_variable
         final userCredentials = await _firebase.signInWithEmailAndPassword(
           email: _enteredEamil,
           password: _enteredPassword,

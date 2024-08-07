@@ -1,13 +1,12 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:try2win/providers/customer_notifier.dart';
-import 'package:try2win/providers/locale_notifier.dart';
 import 'package:try2win/screens/campaigns.dart';
 import 'package:try2win/screens/coupons.dart';
 import 'package:try2win/screens/seller_home.dart';
 import 'package:try2win/screens/seller_tickets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:try2win/widgets/locale_menu.dart';
+import 'package:try2win/widgets/sign_out.dart';
 
 class SellerTabsScreen extends ConsumerStatefulWidget {
   const SellerTabsScreen({super.key});
@@ -20,8 +19,6 @@ class SellerTabsScreen extends ConsumerStatefulWidget {
 
 class _SellerTabsScreenState extends ConsumerState<SellerTabsScreen> {
   int selectedPageIndex = 0;
-
-  int selectedLocale = 0;
 
   void selectPage(int index) {
     setState(() {
@@ -52,46 +49,9 @@ class _SellerTabsScreenState extends ConsumerState<SellerTabsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(activePageTitle),
-        actions: [
-          PopupMenuButton(
-            initialValue: selectedLocale,
-            onSelected: (int item) {
-              setState(() {
-                selectedLocale = item;
-                ref.read(localeProvider.notifier).setLocaleIndex(item);
-              });
-            },
-            itemBuilder: (BuildContext context) {
-              return <PopupMenuEntry<int>>[
-                const PopupMenuItem<int>(
-                  value: 0,
-                  child: Text('EN'),
-                ),
-                const PopupMenuItem(
-                  value: 1,
-                  child: Text('IT'),
-                ),
-                const PopupMenuItem(
-                  value: 2,
-                  child: Text('DE'),
-                ),
-                const PopupMenuItem(
-                  value: 3,
-                  child: Text('FR'),
-                ),
-              ];
-            },
-          ),
-          IconButton(
-            onPressed: () {
-              FirebaseAuth.instance.signOut();
-              ref.read(customerProvider.notifier).resetCustomer();
-            },
-            icon: Icon(
-              Icons.exit_to_app,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-          )
+        actions: const [
+          LocaleMenu(),
+          SignOut(),
         ],
       ),
       body: activePage,
