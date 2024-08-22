@@ -16,12 +16,13 @@ class CouponsList extends StatelessWidget {
           return ListTile(
             title: Container(
               decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                borderRadius: const BorderRadius.all(Radius.circular(30)),
                 color: couponsList[index].coupon.used == true
-                    ? Theme.of(ctx).colorScheme.secondary.withOpacity(0.5)
-                    : Theme.of(ctx).colorScheme.primary.withOpacity(0.5),
+                    ? Theme.of(ctx).colorScheme.inversePrimary
+                    : Theme.of(ctx).colorScheme.primary,
               ),
               margin: const EdgeInsets.all(5),
+              height: 150,
               child: Column(
                 children: [
                   Text(couponsList[index].supplier.title),
