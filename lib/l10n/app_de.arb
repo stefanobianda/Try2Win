@@ -10,5 +10,6 @@
    "readQRCode": "Lesen Sie einen QR-Code, um ein Ticket zu erstellen, drücken Sie auf das Bild unten",
    "showQRCode": "Zeigen Sie Ihren QR-Code",
    "titleScanQRCode": "QR-Code scannen",
-   "scanSomething": "Einen Try2Win QR-Code lesen"
+   "scanSomething": "Einen Try2Win QR-Code lesen",
+   "settings": "Einstellungen"
 } 

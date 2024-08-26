@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:try2win/providers/customer_notifier.dart';
 import 'package:try2win/providers/locale_notifier.dart';
+import 'package:try2win/screens/campaign_option.dart';
 import 'package:try2win/screens/campaigns.dart';
 import 'package:try2win/screens/coupons.dart';
 import 'package:try2win/screens/seller_home.dart';
@@ -23,7 +24,7 @@ class _SellerTabsScreenState extends ConsumerState<SellerTabsScreen> {
 
   int selectedLocale = 0;
 
-  void selectPage(int index) {
+  Future<void> selectPage(int index) async {
     setState(() {
       selectedPageIndex = index;
     });
@@ -47,6 +48,11 @@ class _SellerTabsScreenState extends ConsumerState<SellerTabsScreen> {
     if (selectedPageIndex == 3) {
       activePage = const CouponsScreen();
       activePageTitle = AppLocalizations.of(context)!.coupons;
+    }
+
+    if (selectedPageIndex == 4) {
+      activePage = const CampaignOptionScreen();
+      activePageTitle = AppLocalizations.of(context)!.settings;
     }
 
     return Scaffold(
@@ -115,6 +121,10 @@ class _SellerTabsScreenState extends ConsumerState<SellerTabsScreen> {
           BottomNavigationBarItem(
             icon: const Icon(Icons.card_giftcard),
             label: AppLocalizations.of(context)!.coupons,
+          ),
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.settings),
+            label: AppLocalizations.of(context)!.settings,
           ),
         ],
       ),

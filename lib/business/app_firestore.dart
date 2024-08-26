@@ -10,6 +10,7 @@ import 'package:try2win/business/ticket_bo.dart';
 import 'package:try2win/models/campaign.dart';
 import 'package:try2win/models/coupon.dart';
 import 'package:try2win/models/customer.dart';
+import 'package:try2win/models/quota.dart';
 import 'package:try2win/models/ticket.dart';
 import 'package:try2win/models/seller.dart';
 
@@ -300,5 +301,55 @@ class AppFirestore {
         .collection('sellers')
         .doc(sellerId)
         .update({'isProcessing': isProcessing});
+  }
+
+  Future<Quota> getSellerCampaignCurrentQuota() async {
+    Customer customer = await getCustomer();
+    final quotaRef = db
+        .collection('sellers')
+        .doc(customer.sellerId)
+        .collection('quotas')
+        .doc('current')
+        .withConverter(
+            fromFirestore: Quota.fromFirestore,
+            toFirestore: (Quota quota, _) => quota.toFirestore());
+    final docSnap = await quotaRef.get();
+    Quota currentQuota = Quota(
+        quota: 1000, renumeration: 100, value: 50, createdAt: Timestamp.now());
+    if (docSnap.exists) {
+      currentQuota = docSnap.data()!;
+      print("reead current quota ${currentQuota.quota}");
+    }
+    return currentQuota;
+  }
+
+  Future<void> setQuota(Quota quota) async {
+    Customer customer = await getCustomer();
+    db
+        .collection('sellers')
+        .doc(customer.sellerId)
+        .collection('quotas')
+        .add(quota.toFirestore());
+  }
+
+  getSellerCampaignQuota() async {
+    Customer customer = await getCustomer();
+    final quotaRef = db
+        .collection('sellers')
+        .doc(customer.sellerId)
+        .collection('quotas')
+        .orderBy('createdAt', descending: true)
+        .withConverter(
+            fromFirestore: Quota.fromFirestore,
+            toFirestore: (Quota quota, _) => quota.toFirestore());
+    final docSnap = await quotaRef.get();
+    Quota lastQuota = Quota(
+        quota: 1000, renumeration: 100, value: 50, createdAt: Timestamp.now());
+    if (docSnap.docs.isNotEmpty) {
+      print("reead last quota");
+      lastQuota = docSnap.docs.first.data();
+      print("reead last quota ${lastQuota.quota}");
+    }
+    return lastQuota;
   }
 }

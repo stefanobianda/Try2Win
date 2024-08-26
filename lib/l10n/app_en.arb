@@ -10,5 +10,6 @@
    "readQRCode": "Read a QR code to create a ticket, press the image below",
    "showQRCode": "Show your QR code",
    "titleScanQRCode": "Scan QR code",
-   "scanSomething": "Read a Try2Win QR code"
+   "scanSomething": "Read a Try2Win QR code",
+   "settings": "Settings"
 }

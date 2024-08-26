@@ -10,5 +10,6 @@
    "readQRCode": "Leggere un codice QR per creare un biglietto, premi l'immagine sottostante",
    "showQRCode": "Visualizza il tuo codice QR",
    "titleScanQRCode": "Scansione del codice QR",
-   "scanSomething": "Leggere un codice QR Try2Win"
+   "scanSomething": "Leggere un codice QR Try2Win",
+   "settings": "Impostazioni"
 } 
