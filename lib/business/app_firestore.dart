@@ -96,6 +96,20 @@ class AppFirestore {
     return readTickets;
   }
 
+  Future<int> getSellerTicketsCount() async {
+    final customer = await getCustomer();
+    final countSnapshotRef = db
+        .collection('tickets')
+        .where('sellerId', isEqualTo: customer.sellerId)
+        .count();
+    final docSnap = await countSnapshotRef.get();
+    int count = 0;
+    if (docSnap.count != null) {
+      count = docSnap.count!;
+    }
+    return count;
+  }
+
   Future<Campaign> getCampaign(String sellerId, String campaignId) async {
     final campaignRef = db
         .collection('sellers')

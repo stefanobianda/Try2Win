@@ -3,16 +3,9 @@ import 'package:try2win/widgets/app_decoration.dart';
 import 'package:try2win/widgets/current_campaign_option.dart';
 import 'package:try2win/widgets/new_campaign_option.dart';
 
-class CampaignOptionScreen extends StatefulWidget {
+class CampaignOptionScreen extends StatelessWidget {
   const CampaignOptionScreen({super.key});
 
-  @override
-  State<CampaignOptionScreen> createState() {
-    return _CampaignOptionScreenState();
-  }
-}
-
-class _CampaignOptionScreenState extends State<CampaignOptionScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(

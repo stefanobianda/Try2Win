@@ -15,6 +15,7 @@ class NewCampaignOption extends StatefulWidget {
 class _NewCampaignOptionState extends State<NewCampaignOption> {
   final _form = GlobalKey<FormState>();
   final TextEditingController _renumerationController = TextEditingController();
+  final TextEditingController _valueController = TextEditingController();
 
   final List<int> thresholdList = [100, 250, 500, 1000];
   final List<int> renumerationList = [25, 35, 60, 100];
@@ -39,12 +40,15 @@ class _NewCampaignOptionState extends State<NewCampaignOption> {
       initDone = true;
     });
     _renumerationController.text = renumerationList[current].toString();
+    _valueController.text = readQuota.value.toString();
+    _value = readQuota.value.toString();
   }
 
   @override
   void dispose() {
     // Pulisci il controller quando il widget viene eliminato
     _renumerationController.dispose();
+    _valueController.dispose();
     super.dispose();
   }
 
@@ -98,6 +102,10 @@ class _NewCampaignOptionState extends State<NewCampaignOption> {
                 child: TextField(
                   controller: _renumerationController,
                   enabled: false,
+                  decoration: const InputDecoration(
+                    fillColor: Colors.red,
+                    filled: true,
+                  ),
                   textAlign: TextAlign.right,
                 ),
               ),
@@ -114,11 +122,12 @@ class _NewCampaignOptionState extends State<NewCampaignOption> {
               ),
               Expanded(
                 child: TextFormField(
+                  controller: _valueController,
                   keyboardType: TextInputType.number,
                   textAlign: TextAlign.right,
-                  initialValue: readQuota.value.toString(),
                   decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
+                    fillColor: Colors.red,
+                    filled: true,
                     hintText: "min 20",
                   ),
                   validator: (value) {
@@ -131,6 +140,12 @@ class _NewCampaignOptionState extends State<NewCampaignOption> {
                       return "Min is 20";
                     }
                     return null;
+                  },
+                  onChanged: (value) {
+                    _value = value;
+                    setState(() {
+                      _isButtonEnabled = checkIsButtonEnabled();
+                    });
                   },
                   onSaved: (value) {
                     _value = value;
@@ -154,7 +169,7 @@ class _NewCampaignOptionState extends State<NewCampaignOption> {
   void onChanged(double value) {
     setState(() {
       current = value.toInt();
-      _isButtonEnabled = true;
+      _isButtonEnabled = checkIsButtonEnabled();
     });
     _renumerationController.text = renumerationList[current].round().toString();
   }
@@ -169,7 +184,7 @@ class _NewCampaignOptionState extends State<NewCampaignOption> {
       _isButtonEnabled = false;
     });
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Button Pressed!')),
+      const SnackBar(content: Text('Setting saved!')),
     );
     Quota quota = Quota(
       quota: thresholdList[current],
@@ -178,5 +193,14 @@ class _NewCampaignOptionState extends State<NewCampaignOption> {
       createdAt: Timestamp.now(),
     );
     AppFirestore().setQuota(quota);
+  }
+
+  bool checkIsButtonEnabled() {
+    bool enabled = false;
+    if ((thresholdList[current] != readQuota.quota) ||
+        (readQuota.value.toString() != _value)) {
+      enabled = true;
+    }
+    return enabled;
   }
 }
