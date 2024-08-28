@@ -18,12 +18,20 @@ final themeData = ThemeData(
   ),
   primaryColor: kTicinoRed,
   useMaterial3: true,
+  inputDecorationTheme: const InputDecorationTheme(
+    fillColor: Colors.blue,
+    filled: true,
+  ),
 );
 final themeDarkData = ThemeData.dark().copyWith(
   appBarTheme: const AppBarTheme().copyWith(
     backgroundColor: kDarkColorScheme.primaryContainer,
   ),
   primaryColorDark: kTicinoBlue,
+  inputDecorationTheme: const InputDecorationTheme(
+    fillColor: Colors.red,
+    filled: true,
+  ),
 );
 
 class Theme {}

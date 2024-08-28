@@ -17,7 +17,7 @@ class CampaignOptionScreen extends StatelessWidget {
         children: [
           NewCampaignOption(),
           SizedBox(
-            height: 32,
+            height: 64,
           ),
           CurrentCampaignOption(),
         ],

@@ -45,10 +45,7 @@ class _CurrentCampaignOptionState extends State<CurrentCampaignOption> {
               width: 100,
               child: InputDecorator(
                 textAlign: TextAlign.right,
-                decoration: const InputDecoration(
-                  fillColor: Colors.red,
-                  filled: true,
-                ),
+                decoration: const InputDecoration(),
                 child: Text(
                   readQuota.quota.toString(),
                   textAlign: TextAlign.right,
@@ -65,10 +62,7 @@ class _CurrentCampaignOptionState extends State<CurrentCampaignOption> {
               width: 100,
               child: InputDecorator(
                 textAlign: TextAlign.right,
-                decoration: const InputDecoration(
-                  fillColor: Colors.red,
-                  filled: true,
-                ),
+                decoration: const InputDecoration(),
                 child: Text(
                   readQuota.renumeration.toString(),
                   textAlign: TextAlign.right,
@@ -85,10 +79,7 @@ class _CurrentCampaignOptionState extends State<CurrentCampaignOption> {
               width: 100,
               child: InputDecorator(
                 textAlign: TextAlign.right,
-                decoration: const InputDecoration(
-                  fillColor: Colors.red,
-                  filled: true,
-                ),
+                decoration: const InputDecoration(),
                 child: Text(
                   readQuota.value.toString(),
                   textAlign: TextAlign.right,
@@ -104,10 +95,7 @@ class _CurrentCampaignOptionState extends State<CurrentCampaignOption> {
             SizedBox(
               width: 100,
               child: InputDecorator(
-                decoration: const InputDecoration(
-                  fillColor: Colors.red,
-                  filled: true,
-                ),
+                decoration: const InputDecoration(),
                 child: Text(
                   registeredTickets.toString(),
                   textAlign: TextAlign.right,

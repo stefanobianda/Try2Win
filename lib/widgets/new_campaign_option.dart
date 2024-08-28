@@ -95,17 +95,13 @@ class _NewCampaignOptionState extends State<NewCampaignOption> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text("Cost for the selected threshold:"),
-              const SizedBox(
-                width: 32,
-              ),
-              Expanded(
+              const Spacer(),
+              SizedBox(
+                width: 100,
                 child: TextField(
                   controller: _renumerationController,
                   enabled: false,
-                  decoration: const InputDecoration(
-                    fillColor: Colors.red,
-                    filled: true,
-                  ),
+                  decoration: const InputDecoration(),
                   textAlign: TextAlign.right,
                 ),
               ),
@@ -117,17 +113,14 @@ class _NewCampaignOptionState extends State<NewCampaignOption> {
           Row(
             children: [
               const Text("Enter the value of the coupons:"),
-              const SizedBox(
-                width: 32,
-              ),
-              Expanded(
+              const Spacer(),
+              SizedBox(
+                width: 100,
                 child: TextFormField(
                   controller: _valueController,
                   keyboardType: TextInputType.number,
                   textAlign: TextAlign.right,
                   decoration: const InputDecoration(
-                    fillColor: Colors.red,
-                    filled: true,
                     hintText: "min 20",
                   ),
                   validator: (value) {
