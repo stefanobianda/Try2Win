@@ -98,10 +98,15 @@ class AppFirestore {
 
   Future<int> getSellerTicketsCount() async {
     final customer = await getCustomer();
-    final countSnapshotRef = db
-        .collection('tickets')
-        .where('sellerId', isEqualTo: customer.sellerId)
-        .count();
+    if (customer.isSeller()) {
+      return getTicketsCountBySellerId(customer.sellerId!);
+    }
+    return -1;
+  }
+
+  Future<int> getTicketsCountBySellerId(String sellerId) async {
+    final countSnapshotRef =
+        db.collection('tickets').where('sellerId', isEqualTo: sellerId).count();
     final docSnap = await countSnapshotRef.get();
     int count = 0;
     if (docSnap.count != null) {
@@ -344,6 +349,14 @@ class AppFirestore {
         .doc(customer.sellerId)
         .collection('quotas')
         .add(quota.toFirestore());
+    if (await getTicketsCountBySellerId(customer.sellerId!) == 0) {
+      db
+          .collection('sellers')
+          .doc(customer.sellerId)
+          .collection('quotas')
+          .doc('current')
+          .update(quota.toFirestore());
+    }
   }
 
   getSellerCampaignQuota() async {
