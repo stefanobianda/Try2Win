@@ -33,7 +33,7 @@ jobs:
         with:
           name: release-apk
           # Try running the build locally with the build command to be sure of this path
-          path: build/app/outputs/flutter-apk/app-debug.apk
+          path: build/app/outputs/flutter-apk/app-release.apk
 
   build_mac:
     runs-on: macos-latest
@@ -52,7 +52,7 @@ jobs:
       - uses: cedvdb/action-flutter-build-ios@v1
         with:
           # always use --export-options-plist=ios/GithubActionsExportOptions.plist
-          build-cmd: flutter build ipa --release 
+          build-cmd: flutter build ipa
           certificate-base64: ${{ secrets.IOS_BUILD_CERTIFICATE_BASE64 }}
           certificate-password: ${{ secrets.IOS_BUILD_CERTIFICATE_PASSWORD }}
           provisioning-profile-base64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
