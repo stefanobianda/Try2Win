@@ -32,12 +32,21 @@ jobs:
   build_mac:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Clone repository
+        uses: actions/checkout@v4
+      - name: Set up Flutter
+        uses: flutter-actions/setup-flutter@v3
+        with:
+          channel: stable
+          version: 3.24.0 
+      - run: flutter --version
+      - run: flutter pub get
+      - run: flutter test
 
       - uses: cedvdb/action-flutter-build-ios@v1
         with:
           # always use --export-options-plist=ios/GithubActionsExportOptions.plist
-          build-cmd: flutter build ipa --release --flavor dev --export-options-plist=ios/GithubActionsExportOptions.plist
+          build-cmd: flutter build ipa --release 
           certificate-base64: ${{ secrets.IOS_BUILD_CERTIFICATE_BASE64 }}
           certificate-password: ${{ secrets.IOS_BUILD_CERTIFICATE_PASSWORD }}
           provisioning-profile-base64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
