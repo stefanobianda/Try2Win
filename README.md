@@ -15,3 +15,23 @@ https://pub.dev/packages/flutter_launcher_icons
 To change the icon:
 - update the image in folder assets 
 - run commands:  `dart run flutter_launcher_icons -f  flutter_launcher_icons.yaml`
+
+
+## Release and debug version
+
+The command below generate files with different scope, name and location.
+
+- `flutter build apk --debug`
+--> build/app/outputs/flutter-apk/app-debug.apk
+- `flutter build apk --release`
+--> build/app/outputs/flutter-apk/app-release.apk
+- `flutter build appbundle --debug`
+--> build/app/outputs/bundle/debug/app-debug.aab
+- `flutter build appbundle --release`
+--> build/app/outputs/bundle/release/app-release.aab
+
+
+- `flutter build ipa --debug`
+--> TODO build/ios/ipa/App-dev.ipa
+- `flutter build ipa --release`
+--> TODO build/ios/ipa/App-dev.ipa
