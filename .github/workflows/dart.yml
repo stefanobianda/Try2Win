@@ -18,13 +18,10 @@ jobs:
     steps:
       - name: Clone repository
         uses: actions/checkout@v4
-      - name: Set up Flutter
-        uses: flutter-actions/setup-flutter@v3
-        with:
-          channel: stable
-          version: 3.24.0 
-      - run: flutter --version
-      - run: flutter pub get
+
+      - name: Set up Environment
+        uses: ./.github/workflows/setup_env.yml
+
       - run: flutter test
       - run: flutter build apk --debug
       - run: flutter build appbundle --debug
@@ -46,13 +43,10 @@ jobs:
     steps:
       - name: Clone repository
         uses: actions/checkout@v4
-      - name: Set up Flutter
-        uses: flutter-actions/setup-flutter@v3
-        with:
-          channel: stable
-          version: 3.24.0 
-      - run: flutter --version
-      - run: flutter pub get
+
+      - name: Set up Environment
+        uses: ./.github/workflows/setup_env.yml
+
       - run: flutter test
 
       - uses: cedvdb/action-flutter-build-ios@v1
