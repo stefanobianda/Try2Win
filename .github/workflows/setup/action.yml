@@ -4,12 +4,12 @@ description: 'Setup the environment for the project in the same way'
 
 runs:
   using: "composite"
-    steps:
-      - name: Set up Flutter
-        uses: flutter-actions/setup-flutter@v3
+  steps:
+    - name: Set up Flutter
+      uses: flutter-actions/setup-flutter@v3
         with:
-            channel: stable
-            version: 3.24.0
+          channel: stable
+          version: 3.24.0
 
-      - run: flutter --version
-      - run: flutter pub get
+    - run: flutter --version
+    - run: flutter pub get
