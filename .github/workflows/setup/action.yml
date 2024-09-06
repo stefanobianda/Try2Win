@@ -11,4 +11,6 @@ runs:
         channel: stable
         version: 3.24.0
     - run: flutter --version
+      shell: bash
     - run: flutter pub get
+      shell: bash
