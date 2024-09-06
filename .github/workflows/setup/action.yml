@@ -1,14 +1,9 @@
-name: Setup Environment
+name: 'Setup Environment'
+author: 'Stefano Bianda'
+description: 'Setup the environment for the project in the same way'
 
-on:
-  workflow_call:
-
-jobs:
-  setup-environment:
-    runs-on: 
-      - ubuntu-latest
-      - macos-latest
-      
+runs:
+  using: 'composite'
     steps:
       - name: Set up Flutter
         uses: flutter-actions/setup-flutter@v3
