@@ -8,7 +8,7 @@ runs:
     - name: Set up Flutter
       uses: flutter-actions/setup-flutter@v3
       with:
-        - channel: stable
-        - version: 3.24.0
+        channel: stable
+        version: 3.24.0
     - run: flutter --version
     - run: flutter pub get
