@@ -1,0 +1,35 @@
+name: Apple
+
+on:
+  push:
+    branches: [ "github_action", "develop" ]
+  pull_request:
+    branches: [ "develop" ]
+
+jobs:
+  build_mac:
+    runs-on: macos-latest
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+
+      - name: Set up Environment
+        uses: ./.github/workflows/setup
+
+      - run: flutter test
+
+      - uses: cedvdb/action-flutter-build-ios@v1
+        with:
+          # always use --export-options-plist=ios/GithubActionsExportOptions.plist
+          build-cmd: flutter build ipa --debug
+          certificate-base64: ${{ secrets.IOS_BUILD_CERTIFICATE_BASE64 }}
+          certificate-password: ${{ secrets.IOS_BUILD_CERTIFICATE_PASSWORD }}
+          provisioning-profile-base64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
+          keychain-password: ${{ secrets.KEYCHAIN_PASSWORD }}
+
+      - name: Archive IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-ipa
+          # Try running the build locally with the build command to be sure of this path
+          path: build/ios/ipa/App-dev.ipa

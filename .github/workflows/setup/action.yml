@@ -1,0 +1,16 @@
+name: 'Setup Environment'
+author: 'Stefano Bianda'
+description: 'Setup the environment for the project in the same way'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Flutter
+      uses: flutter-actions/setup-flutter@v3
+      with:
+        channel: stable
+        version: 3.24.0
+    - run: flutter --version
+      shell: bash
+    - run: flutter pub get
+      shell: bash
