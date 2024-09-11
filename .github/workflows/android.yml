@@ -2,7 +2,7 @@ name: Android
 
 on:
   push:
-    branches: [ "github_action" ]
+    branches: [ "github_action", "develop" ]
   pull_request:
     branches: [ "develop" ]
 
