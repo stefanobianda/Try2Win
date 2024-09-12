@@ -5,6 +5,7 @@ import 'package:try2win/providers/customer_notifier.dart';
 import 'package:try2win/screens/coupons.dart';
 import 'package:try2win/screens/home.dart';
 import 'package:try2win/screens/tickets.dart';
+import 'package:try2win/widgets/navigation_bar_customer.dart';
 
 class TabsScreen extends ConsumerStatefulWidget {
   const TabsScreen({super.key});
@@ -56,24 +57,8 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
         ],
       ),
       body: activePage,
-      bottomNavigationBar: BottomNavigationBar(
-        onTap: selectPage,
-        currentIndex: selectedPageIndex,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shop_two),
-            label: 'Tickets',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.card_giftcard),
-            label: 'Coupons',
-          ),
-        ],
-      ),
+      bottomNavigationBar: NavigationBarCustomer(
+          pageIndex: selectedPageIndex, onSelectedPage: selectPage),
     );
   }
 }

@@ -3,12 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:try2win/providers/customer_notifier.dart';
 import 'package:try2win/providers/locale_notifier.dart';
+import 'package:try2win/providers/seller_view_notifier.dart';
 import 'package:try2win/screens/campaign_option.dart';
 import 'package:try2win/screens/campaigns.dart';
 import 'package:try2win/screens/coupons.dart';
 import 'package:try2win/screens/seller_home.dart';
 import 'package:try2win/screens/seller_tickets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:try2win/widgets/navigation_bar_customer.dart';
+import 'package:try2win/widgets/navigation_bar_seller.dart';
 
 class SellerTabsScreen extends ConsumerStatefulWidget {
   const SellerTabsScreen({super.key});
@@ -21,8 +24,8 @@ class SellerTabsScreen extends ConsumerStatefulWidget {
 
 class _SellerTabsScreenState extends ConsumerState<SellerTabsScreen> {
   int selectedPageIndex = 0;
-
   int selectedLocale = 0;
+  bool isSellerView = false;
 
   Future<void> selectPage(int index) async {
     setState(() {
@@ -30,8 +33,17 @@ class _SellerTabsScreenState extends ConsumerState<SellerTabsScreen> {
     });
   }
 
+  void onChangedSwitch(bool value) {
+    setState(() {
+      ref.read(isSellerViewProvider.notifier).setSellerView(value);
+      selectedPageIndex = 0;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    isSellerView = ref.watch(isSellerViewProvider);
+
     Widget activePage = const SellerHomeScreen();
     var activePageTitle = AppLocalizations.of(context)!.sellerHome;
 
@@ -59,6 +71,10 @@ class _SellerTabsScreenState extends ConsumerState<SellerTabsScreen> {
       appBar: AppBar(
         title: Text(activePageTitle),
         actions: [
+          Switch(
+            value: isSellerView,
+            onChanged: onChangedSwitch,
+          ),
           PopupMenuButton(
             initialValue: selectedLocale,
             onSelected: (int item) {
@@ -101,33 +117,11 @@ class _SellerTabsScreenState extends ConsumerState<SellerTabsScreen> {
         ],
       ),
       body: activePage,
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        onTap: selectPage,
-        currentIndex: selectedPageIndex,
-        items: [
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.shop_two),
-            label: AppLocalizations.of(context)!.tickets,
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.assignment_turned_in),
-            label: AppLocalizations.of(context)!.campaigns,
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.card_giftcard),
-            label: AppLocalizations.of(context)!.coupons,
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.settings),
-            label: AppLocalizations.of(context)!.settings,
-          ),
-        ],
-      ),
+      bottomNavigationBar: isSellerView
+          ? NavigationBarSeller(
+              pageIndex: selectedPageIndex, onSelectedPage: selectPage)
+          : NavigationBarCustomer(
+              pageIndex: selectedPageIndex, onSelectedPage: selectPage),
     );
   }
 }
