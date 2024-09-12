@@ -17,19 +17,11 @@ class SellerQRCodeScreen extends StatefulWidget {
 }
 
 class _SellerQRCodeScreenState extends State<SellerQRCodeScreen> {
-  Type selectedType = Type.seller;
-
   @override
   Widget build(BuildContext context) {
-    var qrcode = '${Configuration.SELLER_CODE}=${widget.customer.sellerId}';
-    String text = '${AppLocalizations.of(context)!.seller} QR code';
-    if (selectedType == Type.customer) {
-      qrcode = '${Configuration.CUSTOMER_CODE}=${widget.customer.customerId}';
-      text = '${AppLocalizations.of(context)!.customer} QR code';
-    }
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Your QR codes"),
+        title: const Text("Seller QR codes"),
       ),
       body: Center(
         child: Container(
@@ -41,37 +33,19 @@ class _SellerQRCodeScreenState extends State<SellerQRCodeScreen> {
               const SizedBox(
                 height: 16,
               ),
-              Text(text),
+              Text('${AppLocalizations.of(context)!.seller} QR code'),
               const SizedBox(
                 height: 16,
               ),
               QrImageView(
-                data: qrcode,
+                data:
+                    '${Configuration.SELLER_CODE}=${widget.customer.sellerId}',
                 version: QrVersions.auto,
                 size: 300,
                 backgroundColor: Colors.white,
               ),
               const SizedBox(
                 height: 32,
-              ),
-              SegmentedButton<Type>(
-                segments: <ButtonSegment<Type>>[
-                  ButtonSegment<Type>(
-                      value: Type.seller,
-                      label: Text(AppLocalizations.of(context)!.seller)),
-                  ButtonSegment<Type>(
-                      value: Type.customer,
-                      label: Text(AppLocalizations.of(context)!.customer)),
-                ],
-                onSelectionChanged: (Set<Type> newSelection) {
-                  setState(() {
-                    // By default there is only a single segment that can be
-                    // selected at one time, so its value is always the first
-                    // item in the selected set.
-                    selectedType = newSelection.first;
-                  });
-                },
-                selected: <Type>{selectedType},
               ),
             ],
           ),

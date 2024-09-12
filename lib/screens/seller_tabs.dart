@@ -6,11 +6,9 @@ import 'package:try2win/providers/locale_notifier.dart';
 import 'package:try2win/providers/seller_view_notifier.dart';
 import 'package:try2win/screens/campaign_option.dart';
 import 'package:try2win/screens/campaigns.dart';
-import 'package:try2win/screens/coupons.dart';
 import 'package:try2win/screens/seller_home.dart';
 import 'package:try2win/screens/seller_tickets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:try2win/widgets/navigation_bar_customer.dart';
 import 'package:try2win/widgets/navigation_bar_seller.dart';
 
 class SellerTabsScreen extends ConsumerStatefulWidget {
@@ -58,11 +56,6 @@ class _SellerTabsScreenState extends ConsumerState<SellerTabsScreen> {
     }
 
     if (selectedPageIndex == 3) {
-      activePage = const CouponsScreen();
-      activePageTitle = AppLocalizations.of(context)!.coupons;
-    }
-
-    if (selectedPageIndex == 4) {
       activePage = const CampaignOptionScreen();
       activePageTitle = AppLocalizations.of(context)!.settings;
     }
@@ -117,11 +110,8 @@ class _SellerTabsScreenState extends ConsumerState<SellerTabsScreen> {
         ],
       ),
       body: activePage,
-      bottomNavigationBar: isSellerView
-          ? NavigationBarSeller(
-              pageIndex: selectedPageIndex, onSelectedPage: selectPage)
-          : NavigationBarCustomer(
-              pageIndex: selectedPageIndex, onSelectedPage: selectPage),
+      bottomNavigationBar: NavigationBarSeller(
+          pageIndex: selectedPageIndex, onSelectedPage: selectPage),
     );
   }
 }

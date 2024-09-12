@@ -2,13 +2,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:try2win/providers/customer_notifier.dart';
+import 'package:try2win/providers/seller_view_notifier.dart';
 import 'package:try2win/screens/coupons.dart';
 import 'package:try2win/screens/home.dart';
 import 'package:try2win/screens/tickets.dart';
 import 'package:try2win/widgets/navigation_bar_customer.dart';
 
 class TabsScreen extends ConsumerStatefulWidget {
-  const TabsScreen({super.key});
+  const TabsScreen({super.key, required this.isSeller});
+
+  final bool isSeller;
 
   @override
   ConsumerState<TabsScreen> createState() {
@@ -22,6 +25,13 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
   void selectPage(int index) {
     setState(() {
       selectedPageIndex = index;
+    });
+  }
+
+  void onChangedSwitch(bool value) {
+    setState(() {
+      ref.read(isSellerViewProvider.notifier).setSellerView(value);
+      selectedPageIndex = 0;
     });
   }
 
@@ -44,6 +54,11 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
       appBar: AppBar(
         title: Text(activePageTitle),
         actions: [
+          if (widget.isSeller)
+            Switch(
+              value: false,
+              onChanged: onChangedSwitch,
+            ),
           IconButton(
             onPressed: () {
               FirebaseAuth.instance.signOut();
