@@ -18,10 +18,12 @@ class TopScreen extends ConsumerStatefulWidget {
 
 class _TopScreenState extends ConsumerState<TopScreen> {
   Customer? customer;
-  bool isSellerView = false;
+  bool isSellerView = true;
+  bool firstTime = false;
 
   @override
   void initState() {
+    firstTime = true;
     ref.read(customerProvider.notifier).loadCustomer();
     super.initState();
   }
@@ -33,11 +35,12 @@ class _TopScreenState extends ConsumerState<TopScreen> {
     isSellerView = ref.watch(isSellerViewProvider);
 
     if (customer != null) {
-      if (isSellerView) {
+      if (isSellerView && customer!.isSeller()) {
         activePage = const SellerTabsScreen();
       } else {
-        activePage = TabsScreen(isSeller: customer!.isSeller());
+        activePage = TabsScreen(showSwitch: customer!.isSeller());
       }
+      firstTime = false;
     }
 
     return Scaffold(

@@ -9,9 +9,9 @@ import 'package:try2win/screens/tickets.dart';
 import 'package:try2win/widgets/navigation_bar_customer.dart';
 
 class TabsScreen extends ConsumerStatefulWidget {
-  const TabsScreen({super.key, required this.isSeller});
+  const TabsScreen({super.key, required this.showSwitch});
 
-  final bool isSeller;
+  final bool showSwitch;
 
   @override
   ConsumerState<TabsScreen> createState() {
@@ -54,7 +54,7 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
       appBar: AppBar(
         title: Text(activePageTitle),
         actions: [
-          if (widget.isSeller)
+          if (widget.showSwitch)
             Switch(
               value: false,
               onChanged: onChangedSwitch,

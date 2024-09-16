@@ -22,7 +22,9 @@ class HomeScreen extends StatelessWidget {
             SizedBox(
               height: 20,
             ),
-            ReadQRCode(),
+            ReadQRCode(
+              isSeller: false,
+            ),
             SizedBox(
               width: 16,
             ),

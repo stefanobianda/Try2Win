@@ -5,11 +5,12 @@ import 'package:try2win/business/app_firestore.dart';
 import 'package:try2win/business/configuration.dart';
 import 'package:try2win/models/customer.dart';
 import 'package:try2win/providers/customer_notifier.dart';
-import 'package:try2win/providers/seller_view_notifier.dart';
 import 'package:try2win/qrcode/qrcode_scanner.dart';
 
 class ReadQRCode extends ConsumerStatefulWidget {
-  const ReadQRCode({super.key});
+  final bool isSeller;
+
+  const ReadQRCode({super.key, required this.isSeller});
 
   @override
   ConsumerState<ReadQRCode> createState() {
@@ -18,7 +19,6 @@ class ReadQRCode extends ConsumerStatefulWidget {
 }
 
 class _ReadQRCodeState extends ConsumerState<ReadQRCode> {
-  bool isSellerView = false;
   Customer? customer;
 
   final MobileScannerController controller = MobileScannerController(
@@ -44,7 +44,6 @@ class _ReadQRCodeState extends ConsumerState<ReadQRCode> {
 
   @override
   Widget build(BuildContext context) {
-    isSellerView = ref.read(isSellerViewProvider);
     customer = ref.read(customerProvider);
 
     Widget currentWidget = ElevatedButton(
@@ -52,7 +51,7 @@ class _ReadQRCodeState extends ConsumerState<ReadQRCode> {
       child: const Text('Read QR code'),
     );
 
-    if (isSellerView) {
+    if (widget.isSeller) {
       currentWidget = GestureDetector(
         onTap: _readQRCode,
         child: Image.asset(

@@ -1,17 +1,20 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:try2win/business/app_firestore.dart';
+import 'package:try2win/providers/customer_notifier.dart';
+import 'package:try2win/providers/seller_view_notifier.dart';
 
 final _firebase = FirebaseAuth.instance;
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _form = GlobalKey<FormState>();
   final _formEmail = GlobalKey<FormFieldState>();
 
@@ -28,6 +31,8 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
     _form.currentState!.save();
+    ref.read(customerProvider.notifier).resetCustomer();
+    ref.read(isSellerViewProvider.notifier).setSellerView(true);
     try {
       if (_isLogin) {
         final userCredentials = await _firebase.signInWithEmailAndPassword(

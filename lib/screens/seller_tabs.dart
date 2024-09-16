@@ -23,7 +23,7 @@ class SellerTabsScreen extends ConsumerStatefulWidget {
 class _SellerTabsScreenState extends ConsumerState<SellerTabsScreen> {
   int selectedPageIndex = 0;
   int selectedLocale = 0;
-  bool isSellerView = false;
+  bool isSellerView = true;
 
   Future<void> selectPage(int index) async {
     setState(() {

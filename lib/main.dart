@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:try2win/firebase_options.dart';
+import 'package:try2win/providers/customer_notifier.dart';
 import 'package:try2win/providers/locale_notifier.dart';
+import 'package:try2win/providers/seller_view_notifier.dart';
 import 'package:try2win/screens/login.dart';
 import 'package:try2win/screens/splash.dart';
 import 'package:try2win/screens/top.dart';
@@ -49,6 +51,8 @@ class Try2WinApp extends ConsumerWidget {
           if (snapshot.hasData) {
             return const TopScreen();
           }
+          ref.read(customerProvider.notifier).resetCustomer();
+          ref.read(isSellerViewProvider.notifier).setSellerView(true);
           return const LoginScreen();
         },
       ),
