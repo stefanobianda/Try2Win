@@ -64,10 +64,6 @@ class _SellerTabsScreenState extends ConsumerState<SellerTabsScreen> {
       appBar: AppBar(
         title: Text(activePageTitle),
         actions: [
-          Switch(
-            value: isSellerView,
-            onChanged: onChangedSwitch,
-          ),
           PopupMenuButton(
             initialValue: selectedLocale,
             onSelected: (int item) {
@@ -96,6 +92,10 @@ class _SellerTabsScreenState extends ConsumerState<SellerTabsScreen> {
                 ),
               ];
             },
+          ),
+          Switch(
+            value: isSellerView,
+            onChanged: onChangedSwitch,
           ),
           IconButton(
             onPressed: () {
