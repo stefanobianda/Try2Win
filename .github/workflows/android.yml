@@ -20,15 +20,15 @@ jobs:
       - run: flutter test
       - run: flutter build apk --debug
       - run: flutter build appbundle --debug
-      - name: Archive APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: release-apk
-          # Try running the build locally with the build command to be sure of this path
-          path: build/app/outputs/flutter-apk/app-debug.apk
-      - name: Archive Bundle
-        uses: actions/upload-artifact@v4
-        with:
-          name: release-bundle
-          # Try running the build locally with the build command to be sure of this path
-          path: build/app/outputs/bundle/debug/app-debug.aab
+      # - name: Archive APK
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: release-apk
+      #     # Try running the build locally with the build command to be sure of this path
+      #     path: build/app/outputs/flutter-apk/app-debug.apk
+      # - name: Archive Bundle
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: release-bundle
+      #     # Try running the build locally with the build command to be sure of this path
+      #     path: build/app/outputs/bundle/debug/app-debug.aab
