@@ -8,7 +8,9 @@ import 'package:try2win/providers/customer_notifier.dart';
 import 'package:try2win/qrcode/qrcode_scanner.dart';
 
 class ReadQRCode extends ConsumerStatefulWidget {
-  const ReadQRCode({super.key});
+  final bool isSeller;
+
+  const ReadQRCode({super.key, required this.isSeller});
 
   @override
   ConsumerState<ReadQRCode> createState() {
@@ -49,7 +51,7 @@ class _ReadQRCodeState extends ConsumerState<ReadQRCode> {
       child: const Text('Read QR code'),
     );
 
-    if (customer!.isSeller()) {
+    if (widget.isSeller) {
       currentWidget = GestureDetector(
         onTap: _readQRCode,
         child: Image.asset(

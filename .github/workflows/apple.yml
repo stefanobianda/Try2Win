@@ -27,9 +27,9 @@ jobs:
           provisioning-profile-base64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
           keychain-password: ${{ secrets.KEYCHAIN_PASSWORD }}
 
-      - name: Archive IPA
-        uses: actions/upload-artifact@v4
-        with:
-          name: release-ipa
-          # Try running the build locally with the build command to be sure of this path
-          path: build/ios/ipa/App-dev.ipa
+      # - name: Archive IPA
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: release-ipa
+      #     # Try running the build locally with the build command to be sure of this path
+      #     path: build/ios/ipa/App-dev.ipa

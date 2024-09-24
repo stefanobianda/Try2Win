@@ -26,7 +26,9 @@ class SellerHomeScreen extends ConsumerWidget {
             const SizedBox(
               height: 32,
             ),
-            const ReadQRCode(),
+            const ReadQRCode(
+              isSeller: true,
+            ),
             const Expanded(
               child: SizedBox(
                 height: 16,

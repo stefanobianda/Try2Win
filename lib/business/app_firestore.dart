@@ -337,7 +337,6 @@ class AppFirestore {
         quota: 1000, renumeration: 100, value: 50, createdAt: Timestamp.now());
     if (docSnap.exists) {
       currentQuota = docSnap.data()!;
-      print("reead current quota ${currentQuota.quota}");
     }
     return currentQuota;
   }
@@ -373,9 +372,7 @@ class AppFirestore {
     Quota lastQuota = Quota(
         quota: 1000, renumeration: 100, value: 50, createdAt: Timestamp.now());
     if (docSnap.docs.isNotEmpty) {
-      print("reead last quota");
       lastQuota = docSnap.docs.first.data();
-      print("reead last quota ${lastQuota.quota}");
     }
     return lastQuota;
   }
