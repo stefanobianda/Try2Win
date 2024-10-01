@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:try2win/business/coupon_bo.dart';
 import 'package:try2win/screens/coupon_detail.dart';
+import 'package:try2win/widgets/container_coupon.dart';
 
 class CouponsList extends StatelessWidget {
   const CouponsList({super.key, required this.couponsList});
@@ -14,24 +15,7 @@ class CouponsList extends StatelessWidget {
         itemCount: couponsList.length,
         itemBuilder: (ctx, index) {
           return ListTile(
-            title: Container(
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(Radius.circular(30)),
-                color: couponsList[index].coupon.used == true
-                    ? Theme.of(ctx).colorScheme.inversePrimary
-                    : Theme.of(ctx).colorScheme.primary,
-              ),
-              margin: const EdgeInsets.all(5),
-              height: 150,
-              child: Column(
-                children: [
-                  Text(couponsList[index].supplier.title),
-                  Text(couponsList[index].campaign.name),
-                  if (couponsList[index].coupon.used == true)
-                    const Text('Already used'),
-                ],
-              ),
-            ),
+            title: ContainerCoupon(coupon: couponsList[index]),
             onTap: () {
               Navigator.push(
                   context,

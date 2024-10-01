@@ -376,4 +376,50 @@ class AppFirestore {
     }
     return lastQuota;
   }
+
+  Future<CouponBO> getLatestCoupon() async {
+    final couponRef = db.collection('latest').doc("coupon").withConverter(
+        fromFirestore: Coupon.fromFirestore,
+        toFirestore: (Coupon coupon, _) => coupon.toFirestore());
+    final docSnap = await couponRef.get();
+    Coupon coupon = docSnap.data()!;
+    CouponBO couponBO = CouponBO(
+      coupon: coupon,
+      supplier: await getSeller(coupon.sellerId),
+      campaign: await getCampaign(
+        coupon.sellerId,
+        coupon.campaignId,
+      ),
+    );
+    return couponBO;
+  }
+
+  Future<TicketBO> getLatestTicket() async {
+    final ticketRef = db.collection('latest').doc("ticket").withConverter(
+        fromFirestore: Ticket.fromFirestore,
+        toFirestore: (Ticket ticket, _) => ticket.toFirestore());
+    final docSnap = await ticketRef.get();
+    Ticket ticket = docSnap.data()!;
+    TicketBO ticketBO = TicketBO(
+      ticket: ticket,
+      seller: await AppFirestore().getSeller(
+        ticket.sellerId,
+      ),
+      customer: await getCustomerById(ticket.customerId),
+    );
+    return ticketBO;
+  }
+
+  getCustomerById(String customerId) async {
+    final customerRef = db
+        .collection('customers')
+        .where('customerId', isEqualTo: customerId)
+        .withConverter(
+          fromFirestore: Customer.fromFirestore,
+          toFirestore: (Customer customer, _) => customer.toFirestore(),
+        );
+    final docSnap = await customerRef.get();
+    var customer = docSnap.docs.first.data();
+    return customer;
+  }
 }
