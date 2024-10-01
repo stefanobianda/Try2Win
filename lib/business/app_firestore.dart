@@ -226,25 +226,40 @@ class AppFirestore {
 
   Future<void> processTicket(customerId, sellerId) async {
     final data = db.collection('tickets').doc();
-    await data.set({
-      'ticketId': data.id,
-      'customerId': customerId,
-      'sellerId': sellerId,
-      'createdAt': Timestamp.now(),
-    });
+    Ticket ticket = Ticket(
+        ticketId: data.id,
+        customerId: customerId,
+        sellerId: sellerId,
+        createdAt: Timestamp.now());
+    await data.set(ticket.toFirestore());
+    final latest = db.collection('latest').doc('ticket');
+    await latest.set(ticket.toFirestore());
+
+    if (await isQuotaLimitReached(sellerId)) {
+      await doSellerProcessing(sellerId);
+    }
+  }
+
+  Future<void> doSellerProcessing(sellerId) async {
+    final seller = await getSeller(sellerId);
+    if (!seller.isProcessingCampaign()) {
+      setSellerProcessing(sellerId, true);
+      await processNewWin(sellerId);
+      setSellerProcessing(sellerId, false);
+    }
+  }
+
+  Future<bool> isQuotaLimitReached(String sellerId) async {
+    bool reached = false;
     final snapshot = await db
         .collection('tickets')
         .where('sellerId', isEqualTo: sellerId)
         .count()
         .get();
     if (snapshot.count != null && snapshot.count! >= 10) {
-      final seller = await getSeller(sellerId);
-      if (!seller.isProcessingCampaign()) {
-        setSellerProcessing(sellerId, true);
-        await processNewWin(sellerId);
-        setSellerProcessing(sellerId, false);
-      }
+      reached = true;
     }
+    return reached;
   }
 
   Future<void> processCoupon(String customerId, String couponId,
@@ -300,19 +315,21 @@ class AppFirestore {
       fromRef.doc(ticket.ticketId).delete();
     }
     toRef.collection('winner').add(winner.toFirestore());
+    Coupon coupon = Coupon(
+        sellerId: sellerId,
+        customerId: winner.customerId,
+        campaignId: toRef.id,
+        value: 50,
+        issuedAt: Timestamp.now(),
+        used: false);
     final winRef = db
         .collection('customers')
         .doc(winner.customerId)
         .collection('coupons')
         .doc();
-    winRef.set(Coupon(
-            sellerId: sellerId,
-            customerId: winner.customerId,
-            campaignId: toRef.id,
-            value: 50,
-            issuedAt: Timestamp.now(),
-            used: false)
-        .toFirestore());
+    winRef.set(coupon.toFirestore());
+    final latestRef = db.collection("latest").doc("coupon");
+    latestRef.set(coupon.toFirestore());
   }
 
   void setSellerProcessing(sellerId, bool isProcessing) {
