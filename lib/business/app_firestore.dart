@@ -226,25 +226,40 @@ class AppFirestore {
 
   Future<void> processTicket(customerId, sellerId) async {
     final data = db.collection('tickets').doc();
-    await data.set({
-      'ticketId': data.id,
-      'customerId': customerId,
-      'sellerId': sellerId,
-      'createdAt': Timestamp.now(),
-    });
+    Ticket ticket = Ticket(
+        ticketId: data.id,
+        customerId: customerId,
+        sellerId: sellerId,
+        createdAt: Timestamp.now());
+    await data.set(ticket.toFirestore());
+    final latest = db.collection('latest').doc('ticket');
+    await latest.set(ticket.toFirestore());
+
+    if (await isQuotaLimitReached(sellerId)) {
+      await doSellerProcessing(sellerId);
+    }
+  }
+
+  Future<void> doSellerProcessing(sellerId) async {
+    final seller = await getSeller(sellerId);
+    if (!seller.isProcessingCampaign()) {
+      setSellerProcessing(sellerId, true);
+      await processNewWin(sellerId);
+      setSellerProcessing(sellerId, false);
+    }
+  }
+
+  Future<bool> isQuotaLimitReached(String sellerId) async {
+    bool reached = false;
     final snapshot = await db
         .collection('tickets')
         .where('sellerId', isEqualTo: sellerId)
         .count()
         .get();
     if (snapshot.count != null && snapshot.count! >= 10) {
-      final seller = await getSeller(sellerId);
-      if (!seller.isProcessingCampaign()) {
-        setSellerProcessing(sellerId, true);
-        await processNewWin(sellerId);
-        setSellerProcessing(sellerId, false);
-      }
+      reached = true;
     }
+    return reached;
   }
 
   Future<void> processCoupon(String customerId, String couponId,
@@ -300,19 +315,21 @@ class AppFirestore {
       fromRef.doc(ticket.ticketId).delete();
     }
     toRef.collection('winner').add(winner.toFirestore());
+    Coupon coupon = Coupon(
+        sellerId: sellerId,
+        customerId: winner.customerId,
+        campaignId: toRef.id,
+        value: 50,
+        issuedAt: Timestamp.now(),
+        used: false);
     final winRef = db
         .collection('customers')
         .doc(winner.customerId)
         .collection('coupons')
         .doc();
-    winRef.set(Coupon(
-            sellerId: sellerId,
-            customerId: winner.customerId,
-            campaignId: toRef.id,
-            value: 50,
-            issuedAt: Timestamp.now(),
-            used: false)
-        .toFirestore());
+    winRef.set(coupon.toFirestore());
+    final latestRef = db.collection("latest").doc("coupon");
+    latestRef.set(coupon.toFirestore());
   }
 
   void setSellerProcessing(sellerId, bool isProcessing) {
@@ -375,5 +392,51 @@ class AppFirestore {
       lastQuota = docSnap.docs.first.data();
     }
     return lastQuota;
+  }
+
+  Future<CouponBO> getLatestCoupon() async {
+    final couponRef = db.collection('latest').doc("coupon").withConverter(
+        fromFirestore: Coupon.fromFirestore,
+        toFirestore: (Coupon coupon, _) => coupon.toFirestore());
+    final docSnap = await couponRef.get();
+    Coupon coupon = docSnap.data()!;
+    CouponBO couponBO = CouponBO(
+      coupon: coupon,
+      supplier: await getSeller(coupon.sellerId),
+      campaign: await getCampaign(
+        coupon.sellerId,
+        coupon.campaignId,
+      ),
+    );
+    return couponBO;
+  }
+
+  Future<TicketBO> getLatestTicket() async {
+    final ticketRef = db.collection('latest').doc("ticket").withConverter(
+        fromFirestore: Ticket.fromFirestore,
+        toFirestore: (Ticket ticket, _) => ticket.toFirestore());
+    final docSnap = await ticketRef.get();
+    Ticket ticket = docSnap.data()!;
+    TicketBO ticketBO = TicketBO(
+      ticket: ticket,
+      seller: await AppFirestore().getSeller(
+        ticket.sellerId,
+      ),
+      customer: await getCustomerById(ticket.customerId),
+    );
+    return ticketBO;
+  }
+
+  getCustomerById(String customerId) async {
+    final customerRef = db
+        .collection('customers')
+        .where('customerId', isEqualTo: customerId)
+        .withConverter(
+          fromFirestore: Customer.fromFirestore,
+          toFirestore: (Customer customer, _) => customer.toFirestore(),
+        );
+    final docSnap = await customerRef.get();
+    var customer = docSnap.docs.first.data();
+    return customer;
   }
 }
