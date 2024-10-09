@@ -9,7 +9,7 @@ runs:
       uses: flutter-actions/setup-flutter@v3
       with:
         channel: stable
-        version: 3.24.0
+        version: 3.24.3
     - run: flutter --version
       shell: bash
     - run: flutter pub get
